@@ -20,16 +20,16 @@ def _parse_function(filename, label):
   
 sess = tf.Session()
 
-regexLabelList = [[re.compile('image_A_*'),[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
-                  [re.compile('image_Ä_*'),[0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
-                  [re.compile('image_M_*'),[0, 0, 1, 0, 0, 0, 0, 0, 0, 0]],
-                  [re.compile('image_O_*'),[0, 0, 0, 1, 0, 0, 0, 0, 0, 0]],
-                  [re.compile('image_Ö_*'),[0, 0, 0, 0, 1, 0, 0, 0, 0, 0]],
-                  [re.compile('image_T_*'),[0, 0, 0, 0, 0, 1, 0, 0, 0, 0]],
-                  [re.compile('image_U_*'),[0, 0, 0, 0, 0, 0, 1, 0, 0, 0]],
-                  [re.compile('image_Ü_*'),[0, 0, 0, 0, 0, 0, 0, 1, 0, 0]],
-                  [re.compile('image_V_*'),[0, 0, 0, 0, 0, 0, 0, 0, 1, 0]],
-                  [re.compile('image_Y_*'),[0, 0, 0, 0, 0, 0, 0, 0, 0, 1]]]
+regexLabelList = [[re.compile('image_A_.*'),[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+                  [re.compile('image_Ae_.*'),[0, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+                  [re.compile('image_M_.*'),[0, 0, 1, 0, 0, 0, 0, 0, 0, 0]],
+                  [re.compile('image_O_.*'),[0, 0, 0, 1, 0, 0, 0, 0, 0, 0]],
+                  [re.compile('image_Oe_.*'),[0, 0, 0, 0, 1, 0, 0, 0, 0, 0]],
+                  [re.compile('image_T_.*'),[0, 0, 0, 0, 0, 1, 0, 0, 0, 0]],
+                  [re.compile('image_U_.*'),[0, 0, 0, 0, 0, 0, 1, 0, 0, 0]],
+                  [re.compile('image_Ue_.*'),[0, 0, 0, 0, 0, 0, 0, 1, 0, 0]],
+                  [re.compile('image_V_.*'),[0, 0, 0, 0, 0, 0, 0, 0, 1, 0]],
+                  [re.compile('image_Y_.*'),[0, 0, 0, 0, 0, 0, 0, 0, 0, 1]]]
 
 
 imageFilenames = []
@@ -39,9 +39,9 @@ for filename in os.listdir('hand_images/'):
     for regex, label in regexLabelList:
         if re.search(regex, filename) != None:
             imageFilenames.append('hand_images/' + filename)
-            #print('hand_images/' + filename)
+            print('hand_images/' + filename)
             imageLabels.append(label)
-            #print(label)
+            print(label)
 
 # A vector of filenames.
 filenames = tf.constant(imageFilenames)
@@ -53,7 +53,7 @@ dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
 dataset = dataset.map(_parse_function)
 
 iterator = dataset.make_one_shot_iterator()
-for _ in range(50):
+for _ in range(80):
     sess.run(iterator.get_next())
 tensor = iterator.get_next()
 print(sess.run(tensor)[1])
