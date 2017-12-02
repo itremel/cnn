@@ -1,0 +1,12 @@
+####-*- coding: utf-8 -*-
+
+#s = "Over \u0e55\u0e57 \u4500  Ö 57 flavours"
+#s = b'O\xcc\x88_up_145_point_8.png'
+
+#fn = 'filename\u4500abc'
+#f = open(fn, 'w')
+#f.close()
+
+#print(os.listdir(b'.'))
+#print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+#print(os.listdir('.'))
