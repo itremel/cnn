@@ -5,8 +5,11 @@ from __future__ import print_function
 import argparse
 import sys
 import tempfile
-
+import re
+import os
+import numpy as np
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 ##kopiert von miist_deep aber mit nur einem conv und pooling layer und ohne dropout
 def cnn(x):
@@ -41,8 +44,8 @@ def cnn(x):
         W_fc2 = weight_variable([1024, 10])
         b_fc2 = bias_variable([10])
 
-        y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
-    return y_conv, keep_prob
+        y_conv = tf.matmul(h_fc1, W_fc2) + b_fc2
+    return y_conv
     
 def conv2d(x, W):
   """conv2d returns a 2d convolution layer with full stride."""
@@ -104,12 +107,36 @@ def create_dataset():
 
     dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
     dataset = dataset.map(_parse_function)
+    #iterator = dataset.make_one_shot_iterator()
+    #features, labelsS = iterator.get_next()
+    #features = tf.reshape(features, [-1,784])
+    #labelsS = tf.reshape(labelsS, [-1,784])
 
     return dataset
 
-def main(_):
-    data = create_dataset()
-
+def main():
+    dataset = create_dataset()
+    print("created dataset")
+    batchsize=10
+    batched_dataset = dataset.batch(batchsize)
+    it = batched_dataset.make_initializable_iterator()
+    next_element = it.get_next()
+    #iterator = batched_dataset.make_one_shot_iterator()
+    #next_element = iterator.get_next()
+    #with tf.Session() as sess:
+        #print(sess.run(next_element)[1])
+        #print(sess.run(next_element)[1])
+        #print(sess.run(next_element)[1])
+    #with tf.Session() as sess:
+        #for _ in range(100):
+            #sess.run(it.initializer)
+        #while True:
+            #try:
+                #print(sess.run(next_element)[1])
+                #print("\n")
+            #except tf.errors.OutOfRangeError:
+                #break
+    #return;
     # Create the model
     x = tf.placeholder(tf.float32, [None, 784])
 
@@ -117,7 +144,7 @@ def main(_):
     y_ = tf.placeholder(tf.float32, [None, 10])
 
     # Build the graph for the deep net
-    y_conv, keep_prob = cnn(x)
+    y_conv = cnn(x)
     
     with tf.name_scope('loss'):
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=y_,
@@ -139,17 +166,60 @@ def main(_):
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        for i in range(20000):
+        #print(sess.run(features))
+        #image=np.array(sess.run(features))
+        #label=np.array(sess.run(labels))
+        #print(image)
+        for i in range(5):
+            sess.run(it.initializer)
             #batch = mnist.train.next_batch(50)
-            batch = data.batch(50)
-            if i % 100 == 0:
-                train_accuracy = accuracy.eval(feed_dict={
-                    x: batch[0], y_: batch[1], keep_prob: 1.0})
-                print('step %d, training accuracy %g' % (i, train_accuracy))
-          train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+            #batch = data.batch(50)
+            #iterator = dataset.make_one_shot_iterator()
+            #next_element = iterator.get_next()
+            while True:
+                try:
+                    #print(sess.run(next_element)[1])
+                    element=sess.run(next_element)
+                    image = np.reshape(element[0], [batchsize,784])
+                    #print(image.shape)
+                    label = np.reshape(element[1],[batchsize,10])
+                    if i % 2 == 0:
+                        train_accuracy = accuracy.eval(feed_dict={x: image, y_: label})
+                        print('step %d, training accuracy %g' % (i, train_accuracy))
+                    train_step.run(feed_dict={x: image, y_: label})
+                except tf.errors.OutOfRangeError:
+                    break
+    #iterator = dataset.make_one_shot_iterator()
+    #next_element = iterator.get_next()
+    #while True:
+        #try:
+            #print(sess.run(next_element[0]))
+            #element=sess.run(next_element)
+            #image = np.reshape(element[0], [1000,784])
+            #label = np.reshape(element[1],[1000,10])
+            #print('test accuracy %g' % accuracy.eval(feed_dict={x: image, y_: label}))
+        #except tf.errors.OutOfRangeError:
+            #break
+        max_value = tf.placeholder(tf.int64, shape=[])
+        iterator = dataset.make_initializable_iterator()
+        sess.run(iterator.initializer, feed_dict={max_value: 1000})
 
-     print('test accuracy %g' % accuracy.eval(feed_dict={
-        x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+        pos = np.random.randint(400, high=1000)
+        print("find random postion....")
+        for _ in range(pos):
+            sess.run(iterator.get_next())
+        tensor = iterator.get_next()
+
+        bla = sess.run(tensor)
+        image = np.reshape(bla[0], [1,784])
+        #print(image.shape)
+        label = np.reshape(bla[1],[1,10])
+        print('test accuracy %g' % accuracy.eval(feed_dict={x: image, y_: label}))
+        print(bla[0].shape)
+        print(bla[1])
+        plt.imshow(np.reshape(bla[0], [28,28]))
+        plt.show()
+
             
 if __name__ == '__main__':
     main()
