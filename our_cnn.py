@@ -95,32 +95,47 @@ def create_dataset():
 
     imageFilenames = []
     imageLabels = []
+    testimageFilenames = []
+    testimageLabels = []
+    
+    counter = 0 
 
     for filename in os.listdir('hand_images/'):
         for regex, label in regexLabelList:
             if re.search(regex, filename) != None:
-                imageFilenames.append('hand_images/' + filename)
-                imageLabels.append(label)
+                if counter < 500:
+                    imageFilenames.append('hand_images/' + filename)
+                    imageLabels.append(label)
+                else:
+                    testimageFilenames.append('hand_images/' + filename)
+                    testimageLabels.append(label)
+                counter += 1
 
     filenames = tf.constant(imageFilenames)
     labels = tf.constant(imageLabels)
+    testfilenames = tf.constant(testimageFilenames)
+    testlabels = tf.constant(testimageLabels)
 
     dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
     dataset = dataset.map(_parse_function)
+    testdataset = tf.data.Dataset.from_tensor_slices((testfilenames, testlabels))
+    testdataset = testdataset.map(_parse_function)
     #iterator = dataset.make_one_shot_iterator()
     #features, labelsS = iterator.get_next()
     #features = tf.reshape(features, [-1,784])
     #labelsS = tf.reshape(labelsS, [-1,784])
 
-    return dataset
+    return dataset, testdataset
 
 def main():
-    dataset = create_dataset()
+    dataset, testdataset = create_dataset()
     print("created dataset")
     batchsize=10
     batched_dataset = dataset.batch(batchsize)
     it = batched_dataset.make_initializable_iterator()
     next_element = it.get_next()
+    
+    batched_test_data = testdataset.batch(batchsize)
     #iterator = batched_dataset.make_one_shot_iterator()
     #next_element = iterator.get_next()
     #with tf.Session() as sess:
@@ -172,6 +187,9 @@ def main():
         #print(image)
         for i in range(5):
             sess.run(it.initializer)
+            
+            train_accuracy = []
+            
             #batch = mnist.train.next_batch(50)
             #batch = data.batch(50)
             #iterator = dataset.make_one_shot_iterator()
@@ -181,14 +199,15 @@ def main():
                     #print(sess.run(next_element)[1])
                     element=sess.run(next_element)
                     image = np.reshape(element[0], [batchsize,784])
-                    #print(image.shape)
+                    #print(image)
                     label = np.reshape(element[1],[batchsize,10])
-                    if i % 2 == 0:
-                        train_accuracy = accuracy.eval(feed_dict={x: image, y_: label})
-                        print('step %d, training accuracy %g' % (i, train_accuracy))
+                    #   print(label)
                     train_step.run(feed_dict={x: image, y_: label})
+                    train_accuracy.append(accuracy.eval(feed_dict={x: image, y_: label}))
                 except tf.errors.OutOfRangeError:
                     break
+            avg_accuracy = np.sum(train_accuracy)/len(train_accuracy)
+            print('step %d, average training accuracy %g' % (i, avg_accuracy))
     #iterator = dataset.make_one_shot_iterator()
     #next_element = iterator.get_next()
     #while True:
@@ -201,24 +220,43 @@ def main():
         #except tf.errors.OutOfRangeError:
             #break
         max_value = tf.placeholder(tf.int64, shape=[])
-        iterator = dataset.make_initializable_iterator()
-        sess.run(iterator.initializer, feed_dict={max_value: 1000})
+        iterator = batched_test_data.make_initializable_iterator()
+        sess.run(iterator.initializer, feed_dict={max_value: 500})
+        next_test_element = iterator.get_next()
 
-        pos = np.random.randint(400, high=1000)
-        print("find random postion....")
-        for _ in range(pos):
-            sess.run(iterator.get_next())
-        tensor = iterator.get_next()
+        #pos = np.random.randint(0, high=500)
+        #print("find random postion....")
+        test_accuracy = []
+        
+        print('starting testruns')
+        while True:
+            try:
+                #print(sess.run(next_element)[1])
+                test_element=sess.run(next_test_element)
+                image = np.reshape(test_element[0], [batchsize,784])
+                #print(image)
+                label = np.reshape(test_element[1], [batchsize,10])
+                #print(y_conv, label)
+                test_accuracy.append(accuracy.eval(feed_dict={x: image, y_: label}))
+            except tf.errors.OutOfRangeError:
+                break
+        avg_accuracy = np.sum(test_accuracy)/len(test_accuracy)
+        print('average test accuracy %g' % avg_accuracy)
+        
+        
+        #for _ in range(pos):
+         #   sess.run(iterator.get_next())
+        #tensor = iterator.get_next()
 
-        bla = sess.run(tensor)
-        image = np.reshape(bla[0], [1,784])
-        #print(image.shape)
-        label = np.reshape(bla[1],[1,10])
-        print('test accuracy %g' % accuracy.eval(feed_dict={x: image, y_: label}))
-        print(bla[0].shape)
-        print(bla[1])
-        plt.imshow(np.reshape(bla[0], [28,28]))
-        plt.show()
+        #bla = sess.run(tensor)
+        #image = np.reshape(bla[0], [1,784])
+        ##print(image.shape)
+        #label = np.reshape(bla[1],[1,10])
+        #print('test accuracy %g' % accuracy.eval(feed_dict={x: image, y_: label}))
+        #print(bla[0].shape)
+        #print(bla[1])
+        #plt.imshow(np.reshape(bla[0], [28,28]))
+        #plt.show()
 
             
 if __name__ == '__main__':
