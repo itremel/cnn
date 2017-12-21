@@ -11,8 +11,46 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-##kopiert von miist_deep aber mit nur einem conv und pooling layer und ohne dropout
+use_inception = False
+
+#creates a cnn with one convolution layer one max pooling layer and one fully connected layer
 def cnn(x):
+    
+    # Reshape to use within a convolutional neural net.
+    # Last dimension is for "features" - there is only one here, since images are
+    # grayscale -- it would be 3 for an RGB image, 4 for RGBA, etc.
+    with tf.name_scope('reshape'):
+        x_image = tf.reshape(x, [-1, 28, 28, 1])
+        
+    # Convolutional layer - maps 1 input image to 32 feature maps.
+    with tf.name_scope('conv'):
+        W_conv = weight_variable([5, 5, 1, 32])
+        b_conv = bias_variable([32])
+        h_conv = tf.nn.relu(conv2d(x_image, W_conv) + b_conv)
+      
+    # Pooling layer - downsamples by 2X.
+    with tf.name_scope('pool'):
+        h_pool = max_pool_2x2(h_conv)
+        
+    # Fully connected layer 1 -- after 1 round of downsampling, our 28x28 image
+    # is down to 14x14x32 feature maps -- maps this to 1024 features.
+    with tf.name_scope('fc1'):
+        W_fc1 = weight_variable([14 * 14 * 32, 1024])
+        b_fc1 = bias_variable([1024])
+
+        h_pool_flat = tf.reshape(h_pool, [-1, 14*14*32])
+        h_fc1 = tf.nn.relu(tf.matmul(h_pool_flat, W_fc1) + b_fc1)
+        
+    # Map the 1024 features to 10 classes, one for each digit
+    with tf.name_scope('fc2'):
+        W_fc2 = weight_variable([1024, 10])
+        b_fc2 = bias_variable([10])
+
+        y_conv = tf.matmul(h_fc1, W_fc2) + b_fc2
+    return y_conv
+
+#creates a cnn with one Inception layer and one fully conected layer
+def cnn_inception(x):
     
     # Reshape to use within a convolutional neural net.
     # Last dimension is for "features" - there is only one here, since images are
@@ -204,7 +242,12 @@ def main():
     y_ = tf.placeholder(tf.float32, [None, 10])
 
     # Build the graph for the deep net
-    y_conv = cnn(x)
+    if use_inception:
+        print('using inception layer')
+        y_conv = cnn_inception(x)
+    else:
+        print('not using inception layer')
+        y_conv = cnn(x)
     
     with tf.name_scope('loss'):
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=y_,
