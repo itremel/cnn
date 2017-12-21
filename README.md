@@ -114,3 +114,13 @@ Please use the latest version offered by Springer.
   [llncs.cls]: ftp://ftp.springer.de/pub/tex/latex/llncs/latex2e/llncs.cls
   [splncs03.bst]: ftp://ftp.springer.de/pub/tex/latex/llncs/latex2e/splncs03.bst
 
+---------------------------------------------------------------
+---------------------------------------------------------------
+---------------------------------------------------------------
+https://github.com/tensorflow/tensorboard
+
+use tensorboard with e.g:
+tensorboard --logdir /tmp/tmpif1bxyq2
+
+open web browser:
+localhost:6006

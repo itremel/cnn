@@ -11,7 +11,7 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-use_inception = False
+use_inception = True
 
 #creates a cnn with one convolution layer one max pooling layer and one fully connected layer
 def cnn(x):
@@ -57,6 +57,7 @@ def cnn_inception(x):
     # grayscale -- it would be 3 for an RGB image, 4 for RGBA, etc.
     with tf.name_scope('reshape'):
         x_image = tf.reshape(x, [-1, 28, 28, 1])
+        tf.summary.image('input', x_image, 10)
         
     #inception layer - performs a 1x1, 3x3, 5x5 convolution and 3x3 max pooling and concatenates the results
     with tf.name_scope('inception'):
@@ -123,6 +124,7 @@ def cnn_inception(x):
         b_fc2 = bias_variable([10])
 
         y_conv = tf.matmul(h_fc1, W_fc2) + b_fc2
+    tf.summary.histogram('y_conv', y_conv)
     return y_conv
     
 def conv2d(x, W):
@@ -213,7 +215,7 @@ def create_dataset():
 def main():
     dataset, testdataset = create_dataset()
     print("created dataset")
-    batchsize=10
+    batchsize=100
     batched_dataset = dataset.batch(batchsize)
     it = batched_dataset.make_initializable_iterator()
     next_element = it.get_next()
@@ -253,6 +255,8 @@ def main():
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=y_,
                                                             logits=y_conv)
     cross_entropy = tf.reduce_mean(cross_entropy)
+    tf.summary.scalar('cross_entropy', cross_entropy)
+
 
     with tf.name_scope('adam_optimizer'):
         train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
@@ -261,7 +265,9 @@ def main():
         correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
         correct_prediction = tf.cast(correct_prediction, tf.float32)
     accuracy = tf.reduce_mean(correct_prediction)
+    tf.summary.scalar('accuracy', accuracy)
 
+    merged = tf.summary.merge_all()
     graph_location = tempfile.mkdtemp()
     print('Saving graph to: %s' % graph_location)
     train_writer = tf.summary.FileWriter(graph_location)
@@ -293,10 +299,20 @@ def main():
                     #   print(label)
                     train_step.run(feed_dict={x: image, y_: label})
                     train_accuracy.append(accuracy.eval(feed_dict={x: image, y_: label}))
+
                 except tf.errors.OutOfRangeError:
                     break
+            #make summary calculation over all 500 elements of the training set
+            whole_batched_dataset = dataset.batch(500)
+            summary_iterator = whole_batched_dataset.make_one_shot_iterator()
+            summary_next_example, summary_next_label = sess.run(summary_iterator.get_next())
+            #print(summary_iterator.output_shapes)
+            summary, acc = sess.run([merged, accuracy], feed_dict={x: np.reshape(summary_next_example,[500,784]), y_: np.reshape(summary_next_label,[500,10])})
+            train_writer.add_summary(summary, i)
+
             avg_accuracy = np.sum(train_accuracy)/len(train_accuracy)
-            print('step %d, average training accuracy %g' % (i, avg_accuracy))
+            print('step %d, average training accuracy %g %g' % (i, avg_accuracy, acc))
+        #train_writer.close()
     #iterator = dataset.make_one_shot_iterator()
     #next_element = iterator.get_next()
     #while True:
