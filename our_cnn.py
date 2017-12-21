@@ -20,7 +20,47 @@ def cnn(x):
     with tf.name_scope('reshape'):
         x_image = tf.reshape(x, [-1, 28, 28, 1])
         
-    # Convolutional layer - maps one grayscale image to 32 feature maps.
+    #inception layer - performs a 1x1, 3x3, 5x5 convolution and 3x3 max pooling and concatenates the results
+    with tf.name_scope('inception'):
+        #follows input
+        W_conv1_1x1_1 = weight_variable([1, 1, 1, 32])
+        b_conv1_1x1_1 = bias_variable([32])
+        h_conv1_1x1_1 = conv2d(x_image,W_conv1_1x1_1)+b_conv1_1x1_1
+     
+        #follows input
+        W_conv1_1x1_2 = weight_variable([1, 1, 1, 16])
+        b_conv1_1x1_2 = bias_variable([16])
+        h_conv1_1x1_2 = tf.nn.relu(conv2d(x_image,W_conv1_1x1_2)+b_conv1_1x1_2)
+     
+        #follows input
+        W_conv1_1x1_3 = weight_variable([1, 1, 1, 16])
+        b_conv1_1x1_3 = bias_variable([16])
+        h_conv1_1x1_3 = tf.nn.relu(conv2d(x_image,W_conv1_1x1_3)+b_conv1_1x1_3)
+        
+        #follows 1x1_2
+        W_conv1_3x3 = weight_variable([3, 3, 16, 32])
+        b_conv1_3x3 = bias_variable([32])
+        h_conv1_3x3 = conv2d(h_conv1_1x1_2,W_conv1_3x3)+b_conv1_3x3
+        
+        #follows 1x1_3
+        W_conv1_5x5 = weight_variable([5, 5, 16, 32])
+        b_conv1_5x5 = bias_variable([32])
+        h_conv1_5x5 = conv2d(h_conv1_1x1_3,W_conv1_5x5)+b_conv1_5x5
+        
+        #follows input
+        h_maxpool1 = max_pool_3x3(x_image)
+        
+        #follows max pooling
+        W_conv1_1x1_4= weight_variable([1, 1, 1, 32])
+        b_conv1_1x1_4= bias_variable([32])
+        h_conv1_1x1_4 = conv2d(h_maxpool1,W_conv1_1x1_4)+b_conv1_1x1_4
+        
+        #concatenate the feature maps
+        h_inception = tf.nn.relu(tf.concat([h_conv1_1x1_1, h_conv1_3x3, h_conv1_5x5, h_conv1_1x1_4], 3))
+    
+    #convolution and max pooling is replaced by inception layer
+    ##################
+    # Convolutional layer - maps 1 input image to 32 feature maps.
     with tf.name_scope('conv'):
         W_conv = weight_variable([5, 5, 1, 32])
         b_conv = bias_variable([32])
@@ -29,15 +69,15 @@ def cnn(x):
     # Pooling layer - downsamples by 2X.
     with tf.name_scope('pool'):
         h_pool = max_pool_2x2(h_conv)
+    ##################
         
-    # Fully connected layer 1 -- after 1 round of downsampling, our 28x28 image
-    # is down to 14x14x32 feature maps -- maps this to 1024 features.
+    # Fully connected layer 1 - after inception layer
     with tf.name_scope('fc1'):
-        W_fc1 = weight_variable([14 * 14 * 32, 1024])
+        W_fc1 = weight_variable([28 *28 * 4*32, 1024])
         b_fc1 = bias_variable([1024])
 
-        h_pool_flat = tf.reshape(h_pool, [-1, 14*14*32])
-        h_fc1 = tf.nn.relu(tf.matmul(h_pool_flat, W_fc1) + b_fc1)
+        h_inception_flat = tf.reshape(h_inception, [-1, 28*28*4*32])
+        h_fc1 = tf.nn.relu(tf.matmul(h_inception_flat, W_fc1) + b_fc1)
         
     # Map the 1024 features to 10 classes, one for each digit
     with tf.name_scope('fc2'):
@@ -56,6 +96,11 @@ def max_pool_2x2(x):
   """max_pool_2x2 downsamples a feature map by 2X."""
   return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
                         strides=[1, 2, 2, 1], padding='SAME')
+                        
+def max_pool_3x3(x):
+  """max_pool_3x3 with stride size of 1"""
+  return tf.nn.max_pool(x, ksize=[1, 3, 3, 1],
+                        strides=[1, 1, 1, 1], padding='SAME')
 
 
 def weight_variable(shape):
@@ -194,6 +239,7 @@ def main():
             #batch = data.batch(50)
             #iterator = dataset.make_one_shot_iterator()
             #next_element = iterator.get_next()
+            print('starting training')
             while True:
                 try:
                     #print(sess.run(next_element)[1])
