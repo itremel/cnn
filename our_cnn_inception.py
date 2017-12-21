@@ -239,7 +239,7 @@ def main():
             #batch = data.batch(50)
             #iterator = dataset.make_one_shot_iterator()
             #next_element = iterator.get_next()
-            print('starting training')
+            print('starting training step', i)
             while True:
                 try:
                     #print(sess.run(next_element)[1])
