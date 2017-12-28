@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 use_inception = True
 
 #set True to restore a previous Model
-use_previous = False
+use_previous = True
 #file path to previous Model
 file_path = os.getcwd()+'/model.ckpt'
 
@@ -23,7 +23,7 @@ file_path = os.getcwd()+'/model.ckpt'
 batchsize = 50
 
 #number of training steps for the Model
-num_steps = 100
+num_steps = 500
 
 #creates a cnn with one convolution layer one max pooling layer and one fully connected layer
 def cnn(x):
@@ -187,13 +187,17 @@ def create_dataset():
     for filename in os.listdir('hand_images/'):
         for regex, label in regexLabelList:
             if re.search(regex, filename) != None:
-                if counter%2 == 0:
+                if counter%4 != 0:
                     imageFilenames.append('hand_images/' + filename)
                     imageLabels.append(label)
                 else:
                     testimageFilenames.append('hand_images/' + filename)
                     testimageLabels.append(label)
                 counter += 1
+                
+    if counter == 0:
+        print('No hand images found')
+        return 
 
     filenames = tf.constant(imageFilenames)
     labels = tf.constant(imageLabels)
@@ -286,8 +290,9 @@ def main():
                 
                 train_writer.add_summary(summary, i)
 
-                avg_accuracy = np.sum(train_accuracy)/len(train_accuracy)
-                print('step %d, average training accuracy %g' % (i, avg_accuracy))
+                if i % 50 == 0:
+                    avg_accuracy = np.sum(train_accuracy)/len(train_accuracy)
+                    print('step %d, average training accuracy %g' % (i, avg_accuracy))
             
             except tf.errors.OutOfRangeError:
                 sess.run(it.initializer)
