@@ -13,6 +13,10 @@
 \usepackage{cmap}
 \usepackage[T1]{fontenc}
 
+%https://tex.stackexchange.com/questions/57743/how-to-write-%c3%a4-and-other-umlauts-and-accented-letters-in-bibliography#57745
+%for german umlauts
+\usepackage[utf8]{inputenc}
+
 \usepackage{graphicx}
 
 %Even though `american`, `english` and `USenglish` are synonyms for babel package (according to https://tex.stackexchange.com/questions/12775/babel-english-american-usenglish), the llncs document class is prepared to avoid the overriding of certain names (such as "Abstract." -> "Abstract" or "Fig." -> "Figure") when using `english`, but not when using the other 2.
@@ -139,15 +143,15 @@ qt=false%
 
 \begin{document}
 
-\title{Paper Title}
+\title{Bilderkennung mit Convolutional Neural Networks}
 %If Title is too long, use \titlerunning
 %\titlerunning{Short Title}
 
 %Single insitute
-\author{Firstname Lastname \and Firstname Lastname}
+\author{Ivo Tremel \and Lennard Nöhren}
 %If there are too many authors, use \authorrunning
 %\authorrunning{First Author et al.}
-\institute{Institute}
+\institute{Computational Health Informatics}
 
 %Multiple insitutes
 %Currently disabled
@@ -180,8 +184,10 @@ keyword1, keyword2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Der Ansatz der Faltungsnetze bewahrt die entscheidende Lokalität der Bildinformationen.
- 
+
+Convolutional Neural Networks kommen nahe an menschliche Leistungen heran und der Ansatz der Faltungsnetze bewahrt die entscheidende Lokalität der Bildinformationen. Allerdings
+
+
 %\blindtext\todo{Refine me}
 
 Winery~\cite{Winery} is graphical \commentontext{modeling}{modeling with one \enquote{l}, because of AE} tool.
@@ -226,6 +232,19 @@ In case you write \enquote{application-specific}, then the word will only be hyp
 You can also write applica\allowbreak{}tion-specific, but this is much more effort.
 
 \section{Materials and Methods}\label{sec:material}
+\subsubsection*{Convolutional Layers}
+
+\subsubsection*{Pooling Layers}
+In CNNs fassen Pooling-Layers den Output von den vorhergehenden Neuronen entsprechend der gewählten Kernelgröße zusammen. Dabei wird bei einem 2x2 Kernel der größte Output durchgeschaltet und die anderen drei Ausgänge verworfen. Damit wird eine Reduktion der Datenmenge erreicht, die eine insgesamt schnellere Berechnung ermöglicht.
+\subsubsection*{Architektur}
+\begin{figure}
+	\caption{Main Graph}
+	\includegraphics[width=\textwidth]{images/main_graph.png}
+	\label{fig:main_graph}
+\end{figure}\Cref{fig:main_graph} zeigt den Aufbau des CNNs. Vor dem ersten convolutional Layer wird das Eingabebild zu einem 28x28x1 Bild transformiert. Die erste und zweite Dimension stehen dabei für die Bildhöhe und Bildbreite. Die dritte Dimension bezeichnet die Anzahl von Farbkanälen. Da es sich um ein Graustufenbild handelt und nicht RGB wird der Wert 1 angenommen. 
+Bei der convolution werden mit einer Kernelgröße von 5x5 32 features erzeugt.
+
+
 \section{Results}\label{sec:result}
 \section{Discussion}\label{sec:Discussion}
 
