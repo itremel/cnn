@@ -233,7 +233,7 @@ You can also write applica\allowbreak{}tion-specific, but this is much more effo
 
 \section{Materials and Methods}\label{sec:material}
 \subsubsection*{Convolutional Layers}
-
+Die Neuronen im Convolutional Layer führen eine diskrete Faltung auf dem Eingabebild durch. Dafür verwenden sie eine kleine Matrix, zum Beispiel mit der Größe 5x5, mit der sie über das Bild laufen und jeweils durch das innere Produkt der Matrix die Werte berechnen. Diese Matrix wird Fitlerkernel genannt. Danach wird wie bei normalen Neuronen mithilfe einer Aktivierungsfunktion der Output des Neurons bestimmt. Der Vorteil dieser Methode ist, das durch den Filterkernel nicht nur einzelne Punkte eines Bildes betrachtet werden, sondern auch die lokale Umgebung von jedem Punkt. Dadurch können größere Features, die aus mehreren Punkten bestehen besser erkannt werden.
 \subsubsection*{Pooling Layers}
 In CNNs fassen Pooling-Layers den Output von den vorhergehenden Neuronen entsprechend der gewählten Kernelgröße zusammen. Dabei wird bei einem 2x2 Kernel der größte Output durchgeschaltet und die anderen drei Ausgänge verworfen. Damit wird eine Reduktion der Datenmenge erreicht, die eine insgesamt schnellere Berechnung ermöglicht.
 \subsubsection*{Architektur}
@@ -243,7 +243,19 @@ In CNNs fassen Pooling-Layers den Output von den vorhergehenden Neuronen entspre
 	\label{fig:main_graph}
 \end{figure}\Cref{fig:main_graph} zeigt den Aufbau des CNNs. Vor dem ersten convolutional Layer wird das Eingabebild zu einem 28x28x1 Bild transformiert. Die erste und zweite Dimension stehen dabei für die Bildhöhe und Bildbreite. Die dritte Dimension bezeichnet die Anzahl von Farbkanälen. Da es sich um ein Graustufenbild handelt und nicht RGB wird der Wert 1 angenommen. 
 Bei der convolution werden mit einer Kernelgröße von 5x5 32 features erzeugt.
-
+\subsection*{Inception Layers}
+Inception Layers wurden 2014 das erste mal in GoogLeNet verwendet \cite{Inception_paper}. In einem normalen Convolutional Layer muss man sich festlegen welche Größe der Filterkernel haben soll. Verschieden Größen bringen dabei immer Vor- und Nachteile mit sich. Deshalb ist die Idee von Inception Layers diese Wahl flexibler zu machen und dem Netz zu überlassen. Um das zu ermöglichen enthält ein Inception Layer Convolution Module mit verschiedenen Kernelgrößen und auch pooling Module, die Konkateniert werden.
+In \Cref{fig:inception_naive_graph} sieht man den Naiven Aufbau eines Inception Layers, wobei alle Module direkt auf den Input angewendet und dann Konkateniert werden. Das Problem bei diesem Ansatz ist allerdings, das dieses Layer einen extrem hohen Rechenaufwand hätte. Um das ein wenig zu verringern führt man üblicherweise vor den großen Convolutions jeweils auch eine 1x1 Convolution durch. Durch die 1x1 Convolution reduziert man die Dimension des Inputs für die großen Module, was zu einer deutlich besseren Laufzeit führt. Dadurch erhält man den Aufbau, den man in \Cref{fig:inception_pro_graph} sieht.(Original Paper als quelle für diesen Absatz verlinken)
+\begin{figure}
+	\caption{Naives Inception Layer}
+	\includegraphics[width=\textwidth]{images/inception_naive_graph.png}
+	\label{fig:inception_naive_graph}
+\end{figure}
+\begin{figure}
+	\caption{Verbessertes Inception Layer}
+	\includegraphics[width=\textwidth]{images/inception_pro_graph.png}
+	\label{fig:inception_pro_graph}
+\end{figure}
 
 \section{Results}\label{sec:result}
 \section{Discussion}\label{sec:Discussion}
