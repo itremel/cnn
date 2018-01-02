@@ -236,16 +236,9 @@ You can also write applica\allowbreak{}tion-specific, but this is much more effo
 Die Neuronen im Convolutional Layer führen eine diskrete Faltung auf dem Eingabebild durch. Dafür verwenden sie eine kleine Matrix, zum Beispiel mit der Größe 5x5, mit der sie über das Bild laufen und jeweils durch das innere Produkt der Matrix die Werte berechnen. Diese Matrix wird Fitlerkernel genannt. Danach wird wie bei normalen Neuronen mithilfe einer Aktivierungsfunktion der Output des Neurons bestimmt. Der Vorteil dieser Methode ist, das durch den Filterkernel nicht nur einzelne Punkte eines Bildes betrachtet werden, sondern auch die lokale Umgebung von jedem Punkt. Dadurch können größere Features, die aus mehreren Punkten bestehen besser erkannt werden.
 \subsubsection*{Pooling Layers}
 In CNNs fassen Pooling-Layers den Output von den vorhergehenden Neuronen entsprechend der gewählten Kernelgröße zusammen. Dabei wird bei einem 2x2 Kernel der größte Output durchgeschaltet und die anderen drei Ausgänge verworfen. Damit wird eine Reduktion der Datenmenge erreicht, die eine insgesamt schnellere Berechnung ermöglicht.
-\subsubsection*{Architektur}
-\begin{figure}
-	\caption{Main Graph}
-	\includegraphics[width=\textwidth]{images/main_graph.png}
-	\label{fig:main_graph}
-\end{figure}\Cref{fig:main_graph} zeigt den Aufbau des CNNs. Vor dem ersten convolutional Layer wird das Eingabebild zu einem 28x28x1 Bild transformiert. Die erste und zweite Dimension stehen dabei für die Bildhöhe und Bildbreite. Die dritte Dimension bezeichnet die Anzahl von Farbkanälen. Da es sich um ein Graustufenbild handelt und nicht RGB wird der Wert 1 angenommen. 
-Bei der convolution werden mit einer Kernelgröße von 5x5 32 features erzeugt.
 \subsection*{Inception Layers}
 Inception Layers wurden 2014 das erste mal in GoogLeNet verwendet \cite{Inception_paper}. In einem normalen Convolutional Layer muss man sich festlegen welche Größe der Filterkernel haben soll. Verschieden Größen bringen dabei immer Vor- und Nachteile mit sich. Deshalb ist die Idee von Inception Layers diese Wahl flexibler zu machen und dem Netz zu überlassen. Um das zu ermöglichen enthält ein Inception Layer Convolution Module mit verschiedenen Kernelgrößen und auch pooling Module, die Konkateniert werden.
-In \Cref{fig:inception_naive_graph} sieht man den Naiven Aufbau eines Inception Layers, wobei alle Module direkt auf den Input angewendet und dann Konkateniert werden. Das Problem bei diesem Ansatz ist allerdings, das dieses Layer einen extrem hohen Rechenaufwand hätte. Um das ein wenig zu verringern führt man üblicherweise vor den großen Convolutions jeweils auch eine 1x1 Convolution durch. Durch die 1x1 Convolution reduziert man die Dimension des Inputs für die großen Module, was zu einer deutlich besseren Laufzeit führt. Dadurch erhält man den Aufbau, den man in \Cref{fig:inception_pro_graph} sieht.(Original Paper als quelle für diesen Absatz verlinken)
+In \Cref{fig:inception_naive_graph} sieht man den Naiven Aufbau eines Inception Layers, wobei alle Module direkt auf den Input angewendet und dann Konkateniert werden. Das Problem bei diesem Ansatz ist allerdings, das dieses Layer einen extrem hohen Rechenaufwand hätte. Um das ein wenig zu verringern führt man üblicherweise vor den großen Convolutions jeweils auch eine 1x1 Convolution durch. Durch die 1x1 Convolution reduziert man die Dimension des Inputs für die großen Module, was zu einer deutlich besseren Laufzeit führt. Dadurch erhält man den Aufbau, den man in \Cref{fig:inception_pro_graph} sieht.
 \begin{figure}
 	\caption{Naives Inception Layer}
 	\includegraphics[width=\textwidth]{images/inception_naive_graph.png}
@@ -256,6 +249,19 @@ In \Cref{fig:inception_naive_graph} sieht man den Naiven Aufbau eines Inception 
 	\includegraphics[width=\textwidth]{images/inception_pro_graph.png}
 	\label{fig:inception_pro_graph}
 \end{figure}
+\subsubsection*{Aufbau Klassisches CNN}
+\begin{figure}
+	\caption{Main Graph of Classic CNN}
+	\includegraphics[width=\textwidth]{images/main_graph_conv.png}
+	\label{fig:main_graph}
+\end{figure}\Cref{fig:main_graph} zeigt den Aufbau des CNNs. Vor dem ersten Convolutional Layer wird das Eingabebild zu einem 28x28x1 Bild transformiert. Die erste und zweite Dimension stehen dabei für die Bildhöhe und Bildbreite. Die dritte Dimension bezeichnet die Anzahl von Farbkanälen. Da es sich um ein Graustufenbild handelt und nicht RGB wird der Wert 1 angenommen. 
+Bei der convolution werden mit einer Kernelgröße von 5x5 32 features erzeugt. Danach wird ein max-pooling mit einer Kernelgröße von 2x2 und einer Schrittweite von 2 durchgeführt. Dadurch wird die Größe des Bildes auf 14x14 reduziert. Anschließend werden die features in ein fully-connected Layer weitergeleitet. Dort werden die Daten in 1024 Nodes verarbeitet und danach an das Output layer, welches ein fully-connected Layer mit 10 Outputs ist, übergeben. Jeder Output steht dabei für einen Buchstaben.
+\subsubsection*{Aufbau CNN mit Inception Layer}
+\begin{figure}
+	\caption{Main Graph of Inception CNN}
+	\includegraphics[width=\textwidth]{images/main_graph_inception.png}
+	\label{fig:main_graph_inception}
+\end{figure} \Cref{fig:main_graph_inception} zeigt nun den Aufbau eines Netzes in dem das convolutional Layer und pooling Layer durch ein inception Layer ersetzt wurde. Dieses bekommt den gleichen Input wie das Convolution Layer im vorher beschriebenen Netz. Der Output des Inception Layers sind 4*32 features. Jedes der 4 Module des Inception Layers erzeugt 32 features der Größe 28x28, welche dann konkateniert werden. Diese Features werden dann wie vorher durch zwei fully-connected Layers weiter verarbeitet.
 
 \section{Results}\label{sec:result}
 \section{Discussion}\label{sec:Discussion}
