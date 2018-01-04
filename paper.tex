@@ -140,6 +140,8 @@ qt=false%
 
 %% END COPYING HERE
 
+\usepackage{subfigure}
+
 
 \begin{document}
 
@@ -184,84 +186,48 @@ keyword1, keyword2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Convolutional Neural Networks kommen nahe an menschliche Leistungen heran und der Ansatz der Faltungsnetze bewahrt die entscheidende Lokalität der Bildinformationen. Allerdings
+Das Erkennen von handschriftlichen Texten in Echtzeit ist eine Funktion, die in vielen Bereichen genutzt werden könnte. Allerdings muss man dafür eine präzise Bildanalyse durchführen, was im Allgemeinen einen hohen Rechenaufwand mit sich bringt. In den letzten Jahren hat der sehr schnelle Fortschritt in dem Bereich Machine Learning und insbesondere Neuronale Netze allerdings eine gute Lösung für diese Problematik hervorgebracht. Convolutional Neural Networks (kurz: CNN) haben großartige Ergebnisse bei allen möglichen Arten der Bildanalyse gezeigt und sind auch ausgezeichnet zum Erkennen von Buchstaben geeignet. Es werden auch immer wieder neue Verbesserungen für CNN's entwickelt, welche die Präzision der Klassifizierung und die Laufzeit stetig verbessern. Eine dieser Erweiterungen sind die so genannten Inception Module, welche im Jahr 2014 das erste mal in GoogLeNet verwendet wurden \cite{Inception_paper}.\\
+Im folgenden wird ein klassisches CNN und ein CNN mit einem Inception Modul für eine Zeichenerkennung genutzt und die Performance der Beiden Netze wird verglichen.\\
+Als zusätzliche Erschwerung enthält das Datenset auch die deutschen Umlaute \"{A} \"{O} und \"{U}, welche nur besonders schwer von den Buchstaben A O und U zu unterscheiden sind.
 
-Convolutional Neural Networks kommen nahe an menschliche Leistungen heran und der Ansatz der Faltungsnetze bewahrt die entscheidende Lokalität der Bildinformationen. Allerdings
-
-
-%\blindtext\todo{Refine me}
-
-Winery~\cite{Winery} is graphical \commentontext{modeling}{modeling with one \enquote{l}, because of AE} tool.
-
-\begin{figure}
-Simple Figure
-\caption{Simple Figure}
-\label{fig:simple}
-\end{figure}
-
-\begin{table}
-\caption{Simple Table}
-
-\label{tab:simple}
-Simple Table
-\end{table}
-
-cref Demonstration: Cref at beginning of sentence, cref in all other cases.
-
-\Cref{fig:simple} shows a simple fact, although \cref{fig:simple} could also show something else.
-
-\Cref{tab:simple} shows a simple fact, although \cref{tab:simple} could also show something else.
-
-\Cref{sec:intro} shows a simple fact, although \cref{sec:intro} could also show something else.
-
-Brackets work as designed:
-<test>
-
-The symbol for powerset is now correct: $\powerset$ and not a Weierstrass p ($\wp$).
-
-\begin{inparaenum}
-\item All these items...
-\item ...appear in one line
-\item This is enabled by the paralist package.
-\end{inparaenum}
-
-``something in quotes'' using plain tex or use \enquote{the enquote command}.
-
-You can now write words containing hyphens which are hyphenated (application"=specific) at other places.
-This is enabled by an additional configuration of the babel package.
-In case you write \enquote{application-specific}, then the word will only be hyphenated at the dash.
-You can also write applica\allowbreak{}tion-specific, but this is much more effort.
 
 \section{Materials and Methods}\label{sec:material}
-\subsubsection*{Convolutional Layers}
+
+\subsection{Klassische Convolutional Neural Networks}
+\subsubsection*{Convolutional Layers:}
 Die Neuronen im Convolutional Layer führen eine diskrete Faltung auf dem Eingabebild durch. Dafür verwenden sie eine kleine Matrix, zum Beispiel mit der Größe 5x5, mit der sie über das Bild laufen und jeweils durch das innere Produkt der Matrix die Werte berechnen. Diese Matrix wird Fitlerkernel genannt. Danach wird wie bei normalen Neuronen mithilfe einer Aktivierungsfunktion der Output des Neurons bestimmt. Der Vorteil dieser Methode ist, das durch den Filterkernel nicht nur einzelne Punkte eines Bildes betrachtet werden, sondern auch die lokale Umgebung von jedem Punkt. Dadurch können größere Features, die aus mehreren Punkten bestehen besser erkannt werden.
-\subsubsection*{Pooling Layers}
+
+\subsubsection*{Pooling Layers:}
 In CNNs fassen Pooling-Layers den Output von den vorhergehenden Neuronen entsprechend der gewählten Kernelgröße zusammen. Dabei wird bei einem 2x2 Kernel der größte Output durchgeschaltet und die anderen drei Ausgänge verworfen. Damit wird eine Reduktion der Datenmenge erreicht, die eine insgesamt schnellere Berechnung ermöglicht.
-\subsection*{Inception Layers}
-Inception Layers wurden 2014 das erste mal in GoogLeNet verwendet \cite{Inception_paper}. In einem normalen Convolutional Layer muss man sich festlegen welche Größe der Filterkernel haben soll. Verschieden Größen bringen dabei immer Vor- und Nachteile mit sich. Deshalb ist die Idee von Inception Layers diese Wahl flexibler zu machen und dem Netz zu überlassen. Um das zu ermöglichen enthält ein Inception Layer Convolution Module mit verschiedenen Kernelgrößen und auch pooling Module, die Konkateniert werden.
-In \Cref{fig:inception_naive_graph} sieht man den Naiven Aufbau eines Inception Layers, wobei alle Module direkt auf den Input angewendet und dann Konkateniert werden. Das Problem bei diesem Ansatz ist allerdings, das dieses Layer einen extrem hohen Rechenaufwand hätte. Um das ein wenig zu verringern führt man üblicherweise vor den großen Convolutions jeweils auch eine 1x1 Convolution durch. Durch die 1x1 Convolution reduziert man die Dimension des Inputs für die großen Module, was zu einer deutlich besseren Laufzeit führt. Dadurch erhält man den Aufbau, den man in \Cref{fig:inception_pro_graph} sieht.
-\begin{figure}
-	\caption{Naives Inception Layer}
-	\includegraphics[width=\textwidth]{images/inception_naive_graph.png}
-	\label{fig:inception_naive_graph}
-\end{figure}
-\begin{figure}
-	\caption{Verbessertes Inception Layer}
-	\includegraphics[width=\textwidth]{images/inception_pro_graph.png}
-	\label{fig:inception_pro_graph}
-\end{figure}
-\subsubsection*{Aufbau Klassisches CNN}
+
+\subsubsection*{Aufbau:}
 \begin{figure}
 	\caption{Main Graph of Classic CNN}
 	\includegraphics[width=\textwidth]{images/main_graph_conv.png}
 	\label{fig:main_graph}
-\end{figure}\Cref{fig:main_graph} zeigt den Aufbau des CNNs. Vor dem ersten Convolutional Layer wird das Eingabebild zu einem 28x28x1 Bild transformiert. Die erste und zweite Dimension stehen dabei für die Bildhöhe und Bildbreite. Die dritte Dimension bezeichnet die Anzahl von Farbkanälen. Da es sich um ein Graustufenbild handelt und nicht RGB wird der Wert 1 angenommen. 
+\end{figure}
+\Cref{fig:main_graph} zeigt den Aufbau des CNNs. Vor dem ersten Convolutional Layer wird das Eingabebild zu einem 28x28x1 Bild transformiert. Die erste und zweite Dimension stehen dabei für die Bildhöhe und Bildbreite. Die dritte Dimension bezeichnet die Anzahl von Farbkanälen. Da es sich um ein Graustufenbild handelt und nicht RGB wird der Wert 1 angenommen. 
 Bei der convolution werden mit einer Kernelgröße von 5x5 32 features erzeugt. Danach wird ein max-pooling mit einer Kernelgröße von 2x2 und einer Schrittweite von 2 durchgeführt. Dadurch wird die Größe des Bildes auf 14x14 reduziert. Anschließend werden die features in ein fully-connected Layer weitergeleitet. Dort werden die Daten in 1024 Nodes verarbeitet und danach an das Output layer, welches ein fully-connected Layer mit 10 Outputs ist, übergeben. Jeder Output steht dabei für einen Buchstaben.
-\subsubsection*{Aufbau CNN mit Inception Layer}
+
+\subsection{CNN mit Inception Layer}
+\subsubsection*{Inception Layers:}
+\begin{figure}
+	\caption{Aufbau eines Inception Layers}
+	\subfigure[Naiver Aufbau]{\includegraphics[width=0.49\textwidth]{images/inception_naive_graph.png}}
+	\subfigure[Verbesserter Aufbau]{\includegraphics[width=0.49\textwidth]{images/inception_pro_graph.png}}
+	\label{fig:inception_graph}
+\end{figure}
+In einem normalen Convolutional Layer muss man sich festlegen welche Größe der Filterkernel haben soll. Verschieden Größen bringen dabei immer Vor- und Nachteile mit sich. Deshalb ist die Idee von Inception Layers diese Wahl flexibler zu machen und dem Netz zu überlassen. Um das zu ermöglichen enthält ein Inception Layer Convolution Module mit verschiedenen Kernelgrößen und auch pooling Module, die Konkateniert werden.
+In \Cref{fig:inception_graph} sieht man den Aufbau eines Inception Layers. Links ist zunächst der Naive Aufbau, wobei alle Module direkt auf den Input angewendet und dann Konkateniert werden. Das Problem bei diesem Ansatz ist allerdings, das dieses Layer einen extrem hohen Rechenaufwand hätte. Um diesen ein wenig zu verringern führt man üblicherweise vor den großen Convolutions jeweils auch eine 1x1 Convolution durch. Durch die 1x1 Convolution reduziert man die Dimension des Inputs für die großen Module, was zu einer deutlich besseren Laufzeit führt. Dadurch erhält man den Aufbau, den man in dem rechtem Diagramm sieht.
+
+\subsubsection*{Aufbau:}
 \begin{figure}
 	\caption{Main Graph of Inception CNN}
 	\includegraphics[width=\textwidth]{images/main_graph_inception.png}
 	\label{fig:main_graph_inception}
-\end{figure} \Cref{fig:main_graph_inception} zeigt nun den Aufbau eines Netzes in dem das convolutional Layer und pooling Layer durch ein inception Layer ersetzt wurde. Dieses bekommt den gleichen Input wie das Convolution Layer im vorher beschriebenen Netz. Der Output des Inception Layers sind 4*32 features. Jedes der 4 Module des Inception Layers erzeugt 32 features der Größe 28x28, welche dann konkateniert werden. Diese Features werden dann wie vorher durch zwei fully-connected Layers weiter verarbeitet.
+\end{figure}
+\Cref{fig:main_graph_inception} zeigt nun den Aufbau eines Netzes in dem das convolutional Layer und pooling Layer durch ein inception Layer ersetzt wurde. Dieses bekommt den gleichen Input wie das Convolution Layer im vorher beschriebenen Netz. Der Output des Inception Layers sind 4*32 features. Jedes der 4 Module des Inception Layers erzeugt 32 features der Größe 28x28, welche dann konkateniert werden. Diese Features werden dann wie vorher durch zwei fully-connected Layers weiter verarbeitet.
 
 \section{Results}\label{sec:result}
 \section{Discussion}\label{sec:Discussion}
