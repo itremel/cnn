@@ -230,6 +230,24 @@ In \Cref{fig:inception_graph} sieht man den Aufbau eines Inception Layers. Links
 \Cref{fig:main_graph_inception} zeigt nun den Aufbau eines Netzes in dem das convolutional Layer und pooling Layer durch ein inception Layer ersetzt wurde. Dieses bekommt den gleichen Input wie das Convolution Layer im vorher beschriebenen Netz. Der Output des Inception Layers sind 4*32 features. Jedes der 4 Module des Inception Layers erzeugt 32 features der Größe 28x28, welche dann konkateniert werden. Diese Features werden dann wie vorher durch zwei fully-connected Layers weiter verarbeitet.
 
 \section{Results}\label{sec:result}
+Wir haben das Datenset, welches aus 1000 Bildern entstand aufgeteilt in ein Trainingsdatenset mit 750 Bildern und ein Testdatenset mit den übrigen 250 Bildern. Für das Training haben wir eine Batches einer Größe von 50 genutzt und für 1000 Generationen trainiert. \\
+
+\begin{figure}
+	\caption{Trainings Genauigkeit und Cross Entropy vom normalen CNN}
+	\subfigure[Genauigkeit]{\includegraphics[width=0.49\textwidth]{images/1000_step_accuracy_conv.png}}
+	\subfigure[Cross Entropy]{\includegraphics[width=0.49\textwidth]{images/1000_step_cross_entropy_conv.png}}
+	\label{fig:conv_result_graph}
+\end{figure}
+In \cref{fig:conv_result_graph} sieht man die Genauigkeit und den loss, den wir mithilfe der Cross Entropy berechnet haben, von dem Neuronalen Netzwerk ohne Inception layer. Man sieht, das bereits nach ungefähr 750 Trainingsläufen die Genauigkeit relativ stabil bei 100\% liegt. Bei den Testläufen die nach diesem Training durchgeführt wurden hat das Netz ungefähr eine Genauigkeit von 85\% erreicht. Das Training von diesem Netz hat auf einem Rechner mit wenig Rechenleistung und ohne Grafikkarte nur ungefähr 5 Minuten gedauert.\\
+
+\begin{figure}
+	\caption{Trainings Genauigkeit und Cross Entropy vom CNN mit Inception layer}
+	\subfigure[Genauigkeit]{\includegraphics[width=0.49\textwidth]{images/1000_step_accuracy_inception.png}}
+	\subfigure[Cross Entropy]{\includegraphics[width=0.49\textwidth]{images/1000_step_cross_entropy_inception.png}}
+	\label{fig:inception_result_graph}
+\end{figure}
+\cref{fig:inception_result_graph} Zeigt die Genauigkeit und den loss von dem CNN, das ein Inception Layer anstelle der Convolution und Max Pooling Layers nutzt. Der grundsätzliche Verlauf der Graphen ist bei beiden Netzen sehr ähnlich und auch die 100 prozentige Genauigkeit wird nach einer ähnlich langen Zeit erreicht. Man sieht allerdings einige Einbrüche, insbesondere bei der Cross Entropy, in den Diagrammen des zweiten Netzes.Auch das Neuronale Netz mit dem Inception Layer erreicht nur eine Testgenauigkeit von 80\% - 85\%. Die Durchführung der 1000 Trainingsschritte hat mit diesem Netz auf dem gleichen Rechner wie bei dem ersten Netz über 30 Minuten gedauert. Also um einen Faktor von 6 länger.\\
+
 \section{Discussion}\label{sec:Discussion}
 
 \section{Conclusion and Outlook}
