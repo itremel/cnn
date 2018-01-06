@@ -176,7 +176,7 @@ Insitute 2\\
 
 \begin{abstract}
 Wir haben ein aufs Wesentliches reduziertes Faltungsnetz zur Klassifizierung von je 100  verschiedenen, handschriftlichen Buchstaben
-in zehn verschiedene Kategorien trainiert. Dabei wurde eine Genauigkeit von 70\% erreicht. Das convolutional neural network (CNN) besteht aus einer Faltungsebene, die von einer Max-Pooling Ebene und einer Fully-Connected Ebene gefolgt wird. Zudem wurde die Erweiterung der Inception-Layers verwendet.
+in zehn verschiedene Kategorien trainiert. Dabei wurde eine Genauigkeit von 85\% erreicht. Das convolutional neural network (CNN) besteht aus einer Faltungsebene, die von einer Max-Pooling Ebene und einer Fully-Connected Ebene gefolgt wird. Zudem wurde die Erweiterung der Inception-Layers verwendet.
 \end{abstract}
 
 \begin{keywords}
@@ -187,7 +187,7 @@ keyword1, keyword2
 \section{Introduction}\label{sec:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Convolutional Neural Networks kommen nahe an menschliche Leistungen heran und der Ansatz der Faltungsnetze bewahrt die entscheidende Lokalität der Bildinformationen. Allerdings
-Das Erkennen von handschriftlichen Texten in Echtzeit ist eine Funktion, die in vielen Bereichen genutzt werden könnte. Allerdings muss man dafür eine präzise Bildanalyse durchführen, was im Allgemeinen einen hohen Rechenaufwand mit sich bringt. In den letzten Jahren hat der sehr schnelle Fortschritt in dem Bereich Machine Learning und insbesondere Neuronale Netze allerdings eine gute Lösung für diese Problematik hervorgebracht. Convolutional Neural Networks (kurz: CNN) haben großartige Ergebnisse bei allen möglichen Arten der Bildanalyse gezeigt und sind auch ausgezeichnet zum Erkennen von Buchstaben geeignet. Es werden auch immer wieder neue Verbesserungen für CNN's entwickelt, welche die Präzision der Klassifizierung und die Laufzeit stetig verbessern. Eine dieser Erweiterungen sind die so genannten Inception Module, welche im Jahr 2014 das erste mal in GoogLeNet verwendet wurden \cite{Inception_paper}.\\
+Das Erkennen von handschriftlichen Texten in Echtzeit ist eine Funktion, die in vielen Bereichen genutzt werden könnte. Allerdings muss man dafür eine präzise Bildanalyse durchführen, was im Allgemeinen einen hohen Rechenaufwand mit sich bringt. In den letzten Jahren hat der sehr schnelle Fortschritt in dem Bereich Machine Learning und insbesondere Neuronale Netze allerdings eine gute Lösung für diese Problematik hervorgebracht. Convolutional Neural Networks (kurz: CNN) haben großartige Ergebnisse bei allen möglichen Arten der Bildanalyse gezeigt und sind auch ausgezeichnet zum Erkennen von Buchstaben geeignet. Es werden auch immer wieder neue Verbesserungen für CNN's entwickelt, welche die Präzision der Klassifizierung und die Laufzeit stetig verbessern. Eine dieser Erweiterungen sind die so genannten Inception Module, welche im Jahr 2014 das erste mal in GoogLeNet verwendet wurden \cite{inception_paper}.\\
 Im folgenden wird ein klassisches CNN und ein CNN mit einem Inception Modul für eine Zeichenerkennung genutzt und die Performance der Beiden Netze wird verglichen.\\
 Als zusätzliche Erschwerung enthält das Datenset auch die deutschen Umlaute \"{A} \"{O} und \"{U}, welche nur besonders schwer von den Buchstaben A O und U zu unterscheiden sind.
 
@@ -246,25 +246,26 @@ In \cref{fig:conv_result_graph} sieht man die Genauigkeit und den loss, den wir 
 	\subfigure[Cross Entropy]{\includegraphics[width=0.49\textwidth]{images/1000_step_cross_entropy_inception.png}}
 	\label{fig:inception_result_graph}
 \end{figure}
-\cref{fig:inception_result_graph} Zeigt die Genauigkeit und den loss von dem CNN, das ein Inception Layer anstelle der Convolution und Max Pooling Layers nutzt. Der grundsätzliche Verlauf der Graphen ist bei beiden Netzen sehr ähnlich und auch die 100 prozentige Genauigkeit wird nach einer ähnlich langen Zeit erreicht. Man sieht allerdings einige Einbrüche, insbesondere bei der Cross Entropy, in den Diagrammen des zweiten Netzes.Auch das Neuronale Netz mit dem Inception Layer erreicht nur eine Testgenauigkeit von 80\% - 85\%. Die Durchführung der 1000 Trainingsschritte hat mit diesem Netz auf dem gleichen Rechner wie bei dem ersten Netz über 30 Minuten gedauert. Also um einen Faktor von 6 länger.\\
+\cref{fig:inception_result_graph} Zeigt die Genauigkeit und den loss von dem CNN, das ein Inception Layer anstelle der Convolution und Max Pooling Layers nutzt. Der grundsätzliche Verlauf der Graphen ist bei beiden Netzen sehr ähnlich und auch die 100 prozentige Genauigkeit wird nach einer ähnlich langen Zeit erreicht. Man sieht allerdings einige Einbrüche, insbesondere bei der Cross Entropy, in den Diagrammen des zweiten Netzes.Auch das Neuronale Netz mit dem Inception Layer erreicht nur eine Testgenauigkeit von 80\% - 85\%. Die Durchführung der 1000 Trainingsschritte hat mit diesem Netz auf dem gleichen Rechner wie bei dem ersten Netz über 30 Minuten gedauert. Also um einen Faktor von 6 länger.
 
 \section{Discussion}\label{sec:Discussion}
+Die Ergebnisse sind etwas enttäuschend, da bereits deutlich höhere Genauigkeiten für Zeichenerkennung mit anderen Convolutional Netzen erreicht wurden. Diese Verwenden häufig das MNIST Datenset \cite{mnist}, welches um ein Vielfaches größer ist als das hier genutzte Datenset. Des weiteren ist während der Entwicklung des Netzes aufgefallen, das in dem Datenset einige Labels nicht zu dem zugehörigen Bild passen, was durch die kleine Anzahl der Daten starke Auswirkungen auf die optimal mögliche Genauigkeit hat.\\
+Ein weiterer Grund für die schlechten Ergebnisse der Tests könnte sein, das hier nur relativ kleine Netze verwendet wurden. Unsere CNN's bestanden nur aus einem Convolution- und Pooling-, beziehungsweise nur aus einem Inception Layer. Deep learning Netze haben sich in der Vergangenheit bereits als deutlich effektiver für Bildanalysen erwiesen \cite{deep_conv}. Allerdings war das für uns nicht möglich, weil uns nur sehr begrenzte Rechenleistung zur Verfügung stand. Besonders die Inception Module sind sehr rechenaufwändig, weshalb ein größeres Netz für uns nicht möglich gewesen wäre.\\
+
+Eine Weitere Beobachtung die man von diesen Testergebnissen machen kann ist das das Netz mit dem Inception Modul keine Verbesserung der Genauigkeit bringt. Es wirkt sogar ein wenig schlechter als das andere Netz. Dazu kommt auch noch das die Laufzeit deutlich schlechter ist. Daraus kann man schließen, dass sich Inception Module nicht so gut dafür eignen um in so kleinen Netzen für schrifterkennung eingesetzt zu werden. Ähnliche Beobachtungen kann man auch mit dem MNIST Datenset machen \cite{inception_blog}. In der Ursprünglichen Veröffentlichung wurden Inception Module in deutlich größeren Netzen und für die Analyse von komplexeren Bildern eingesetzt\cite{inception_paper}.
 
 \section{Conclusion and Outlook}
-Unsere Ergebnisse zeigen, dass das zusätzliche Convolution-Layer eine weiter Verbesserung bei der Image Klassifizierung bringt.
+Unsere Ergebnisse zeigen, dass Inception Layers in kleinen Netzen für die Klassifikation von Handschrift keine Vorteile gegenüber dem klassischen Aufbau von CNN's mit Convolution und Pooling Layers bringen. Außerdem konnte man erkennen, das das genutzte Datenset nicht sehr gut für das Training von Neuronalen Netzen geeignet ist, weil es zu klein ist und falsche Labels enthält.\\
+Für zukünftige Arbeiten sollte man versuchen das Datenset zu erweitern und die Fehler zu korrigieren. Außerdem wäre es Interessant zu untersuchen ob man bei größeren Netzen eine Verbesserung durch Inception Layers bei dieser Art der Klassifizierung beobachten kann.
 \subsubsection*{Acknowledgments}
 ...
 
-In the bibliography, use \texttt{\textbackslash textsuperscript} for ``st'', ``nd'', ...:
-E.g., \enquote{The 2\textsuperscript{nd} conference on examples}.
-When you use \href{https://www.jabref.org}{JabRef}, you can use the clean up command to achieve that.
-See \url{https://help.jabref.org/en/CleanupEntries} for an overview of the cleanup functionality.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{splncs03}
 \bibliography{paper}
 
-All links were last followed on October 5, 2014.
+All links were last followed on January 6, 2018.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
