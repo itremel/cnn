@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 use_inception = False
 
 #set True to restore a previous Model
-use_previous = True
+use_previous = False
 #file path to previous Model
 file_path = os.getcwd()+'/model.ckpt'
 
@@ -23,7 +23,7 @@ file_path = os.getcwd()+'/model.ckpt'
 batchsize = 50
 
 #number of training steps for the Model
-num_steps = 500
+num_steps = 50
 
 #creates a cnn with one convolution layer one max pooling layer and one fully connected layer
 def cnn(x):
@@ -69,7 +69,7 @@ def cnn(x):
         b_fc2 = bias_variable([10])
 
         y_conv = tf.matmul(h_fc1, W_fc2) + b_fc2
-    return y_conv
+    return y_conv, W_conv1
 
 #creates a cnn with one Inception layer and one fully conected layer
 def cnn_inception(x):
@@ -282,7 +282,7 @@ def main():
         y_conv = cnn_inception(x)
     else:
         print('not using inception layer')
-        y_conv = cnn(x)
+        y_conv, W = cnn(x)
     
     #define loss and optimizer
     with tf.name_scope('loss'):
@@ -345,7 +345,17 @@ def main():
                 sess.run(it.initializer)
                 i -= 1
                     
-            
+        #make pictures of learned convolution kernels
+        W_ = sess.run(W)
+        print(W_[:,:,:,3].shape)
+        for i in range(0,32):
+            W_l3 = W_[:,:,:,3].reshape(5, 5)
+            print(W_l3.shape)
+        #plt.plot(W_l3)
+            plt.imsave('wl'+str(i)+'.svg',W_l3)
+        #plt.imshow(W_l3)
+        #plt.show()    
+        #savefig('foo.pdf', bbox_inches='tight')
         #tests
         sess.run(test_it.initializer)      
         test_accuracy = []
