@@ -23,7 +23,7 @@ file_path = os.getcwd()+'/model.ckpt'
 batchsize = 50
 
 #number of training steps for the Model
-num_steps = 50
+num_steps = 1000
 
 #creates a cnn with one convolution layer one max pooling layer and one fully connected layer
 def cnn(x):
@@ -348,14 +348,15 @@ def main():
         #make pictures of learned convolution kernels
         W_ = sess.run(W)
         print(W_[:,:,:,3].shape)
+        #Y_ = y_conv
+        #print(Y_[3].shape)
+        #Y_l3 = W_[3].reshape(10,8)
         for i in range(0,32):
-            W_l3 = W_[:,:,:,3].reshape(5, 5)
+            W_l3 = W_[:,:,:,i].reshape(5, 5)
             print(W_l3.shape)
-        #plt.plot(W_l3)
             plt.imsave('wl'+str(i)+'.svg',W_l3)
-        #plt.imshow(W_l3)
+        #plt.imshow(Y_l3)
         #plt.show()    
-        #savefig('foo.pdf', bbox_inches='tight')
         #tests
         sess.run(test_it.initializer)      
         test_accuracy = []

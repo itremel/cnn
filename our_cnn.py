@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 use_inception = True
 
 #set True to restore a previous Model
-use_previous = True
+use_previous = False
 #file path to previous Model
 file_path = os.getcwd()+'/model.ckpt'
 

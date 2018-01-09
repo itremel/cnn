@@ -45,8 +45,8 @@ for filename in os.listdir('hand_images/'):
             imageLabels.append(label)
             #print(label)
 
-for i in range(len(imageFilenames)):
-    print(imageFilenames[i], imageLabels[i])
+#for i in range(len(imageFilenames)):
+    #print(imageFilenames[i], imageLabels[i])
 
 # A vector of filenames.
 filenames = tf.constant(imageFilenames)
@@ -56,6 +56,7 @@ labels = tf.constant(imageLabels)
 
 dataset = tf.data.Dataset.from_tensor_slices((filenames, labels))
 dataset = dataset.map(_parse_function)
+#dataset = dataset.batch(2)
 
 max_value = tf.placeholder(tf.int64, shape=[])
 iterator = dataset.make_initializable_iterator()
@@ -70,6 +71,7 @@ tensor = iterator.get_next()
 bla = sess.run(tensor)
 
 print(imageFilenames[pos])
+print(bla[0].shape)
 print(bla[1])
 plt.imshow(np.reshape(bla[0], [28,28]))
 plt.show()

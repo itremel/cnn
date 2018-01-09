@@ -175,8 +175,8 @@ Insitute 2\\
 \maketitle
 
 \begin{abstract}
-Wir haben ein aufs Wesentliches reduziertes Faltungsnetz zur Klassifizierung von je 100  verschiedenen, handschriftlichen Buchstaben
-in zehn verschiedene Kategorien trainiert. Dabei wurde eine Genauigkeit von 85\% erreicht. Das convolutional neural network (CNN) besteht aus einer Faltungsebene, die von einer Max-Pooling Ebene und einer Fully-Connected Ebene gefolgt wird. Zudem wurde die Erweiterung der Inception-Layers verwendet.
+Wir haben ein aufs Wesentliche reduziertes Convolutional Netz zur Klassifizierung von je 100  verschiedenen, handschriftlichen Buchstaben des deutschen Alphabets mit Umlauten
+in zehn verschiedene Kategorien trainiert. Dabei wurde eine Genauigkeit von 85\% erreicht. Das Convolutional Neural Network (CNN) besteht aus einer Faltungsebene, die von einer Max-Pooling Ebene und einer Fully-Connected Ebene gefolgt wird. Zudem wurde die Erweiterung der Inception-Layers verwendet.
 \end{abstract}
 
 %\begin{keywords}
@@ -184,7 +184,7 @@ in zehn verschiedene Kategorien trainiert. Dabei wurde eine Genauigkeit von 85\%
 %\end{keywords}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}\label{sec:intro}
+\section{Einleitung}\label{sec:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Convolutional Neural Networks kommen nahe an menschliche Leistungen heran und der Ansatz der Faltungsnetze bewahrt die entscheidende Lokalität der Bildinformationen. Allerdings
 Das Erkennen von handschriftlichen Texten in Echtzeit ist eine Funktion, die in vielen Bereichen genutzt werden könnte. Allerdings muss man dafür eine präzise Bildanalyse durchführen, was im Allgemeinen einen hohen Rechenaufwand mit sich bringt. In den letzten Jahren hat der sehr schnelle Fortschritt in dem Bereich Machine Learning und insbesondere Neuronale Netze allerdings eine gute Lösung für diese Problematik hervorgebracht. Convolutional Neural Networks (kurz: CNN) haben großartige Ergebnisse bei allen möglichen Arten der Bildanalyse gezeigt und sind auch ausgezeichnet zum Erkennen von Buchstaben geeignet. Es werden auch immer wieder neue Verbesserungen für CNN's entwickelt, welche die Präzision der Klassifizierung und die Laufzeit stetig verbessern. Eine dieser Erweiterungen sind die so genannten Inception Module, welche im Jahr 2014 das erste mal in GoogLeNet verwendet wurden \cite{inception_paper}. Das dort beschriebene Netz hat den ersten Platz im ILSVRC(ImageNet Large Scale Visual Recognition Competition) 2014 belegt.\\
@@ -192,22 +192,41 @@ Im folgenden wird ein klassisches CNN und ein CNN mit einem Inception Modul für
 
 \section{Datensatz}\label{sec:dataset}
 Der genutzte Datensatz besteht aus 1000 handschriftlichen Buchstaben des deutschen Alphabets, die in 10 Klassen klassifiziert werden können. 
-Die Klassen bestehen aus den Buchstaben A,M,O,T,U und Ä,Ö,Ü,Y,V.
+\begin{figure}
+	%\includegraphics[width=0.2\textwidth]{hand_images/image_Ae_up_106_point_24.png}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_Ae_up_106_point_24.png}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_M_up_9_point_94.png}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_O_up_5_point_14.png}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_T_up_29_point_14.png}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_U_up_31_point_328.png}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_Ae_up_142_point_31.png}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_Oe_up_157_point_17.png}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_Ue_up_132_point_13.png}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_Y_up_46_point_8.png}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{hand_images/image_V_up_46_point_314.png}}	
+	\caption{Beispiele für Buchstaben aus dem Datensatz}
+	\label{fig:charexample}
+\end{figure}
+Die Klassen bestehen aus den Buchstaben A,M,O,T,U und Ä,Ö,Ü,Y,V, die von Kindern geschrieben wurden. In \cref{fig:charexample} sind einige stellvertretende Beispielbuchstaben aus den verschiedenen Klassen zu sehen.
 %und auch die schwer unterscheidbaren Umlaute Ä,Ö,Ü,Y,V sind dabei.
 Dabei enthält das Datenset die deutschen Umlaute \"{A}, \"{O} und \"{U} als zusätzliche Erschwerung, welche nur besonders schwer von den Buchstaben A, O und U zu unterscheiden sind.
-Allerdings mussten wir feststellen, dass einige Labels falsch sind. Bei dem Bild \glqq image\_Ä\_up\_106\_point\_24.png \grqq ist z.B. kein Ä, sondern ein A zu erkennen.
+
+Allerdings mussten wir feststellen, dass einige Labels falsch sind. Bei dem Bild \glqq image\_Ä\_up\_106\_point\_24.png\grqq   ist in \cref{fig:wrongchar} zum Beispiel kein Ä, sondern ein A zu erkennen.
+
 \begin{figure}
-	\includegraphics[width=0.5\textwidth]{hand_images/image_Ae_up_106_point_24.png}
-	\caption{Falsch gelabeltes Ä}
-	\label{fig:wrong_labeled_image}
+	\centering
+	\includegraphics[width=0.2\textwidth]{hand_images/image_Ae_up_106_point_24.png}
+	
+	\caption{Beispiel für falsch gelabelten Buchstaben}
+	\label{fig:wrongchar}
 \end{figure}
 
-\section{Materials and Methods}\label{sec:material}
+\section{Materialien und Methoden}\label{sec:material}
 
 \subsection{Klassische Convolutional Neural Networks}
 CNNs sind für die Verarbeitung von Daten, die aus mehreren Arrays bestehen, konstruiert. Dies ist zum Beispiel bei einem Farbbild, welches aus drei 2D Arrays besteht, der Fall. In den Arrays des Farbbildes stehen dabei die Pixel Intensitäten der Farbkanäle. Es gibt vier zentrale Ideen bei CNNs, die die Eigenschaften von natürlichen Signalen ausnutzen. Dazu gehören die lokalen Verbindungen, die geteilten Gewichte, das Pooling und die Nutzung von vielen Layers \cite{lecun_nature}. In Bilddaten korrelieren lokale Gruppen von Daten oft sehr stark und bilden damit unterscheidbare lokale Motive, die leicht erkennbar sind. Die Rolle der Convolution Layers ist die Entdeckung von lokalen Features des vorherigen Layers. Die Pooling Layers haben die Aufgabe semantisch gleiche Features in eins zusammenzuführen.
 
-Bei der Nutzung von tiefen neuronalen Netzen wird die Eigenschaft ausgenutzt, dass viele natürliche Signale aus zusammengesetzten Hierarchien bestehen. Bei Bildern werden aus lokalen Kombinationen von Kanten Motive geformt. Diese können wiederum zu Objekten zusammengeführt werden. Die Convolution und Pooling Layers in CNNs sind direkt durch die Abläufe von einfachen und komplexen Zellen der visuellen Neurowissenschaft inspiriert. Die gesamte Architektur hat Paralellitäten zu der Hierarchie des visuellen Cortex. 
+Bei der Nutzung von tiefen neuronalen Netzen wird die Eigenschaft ausgenutzt, dass viele natürliche Signale aus zusammengesetzten Hierarchien bestehen. Bei Bildern werden aus lokalen Kombinationen von Kanten Motive geformt. Diese können wiederum zu Objekten zusammengeführt werden. Die Convolution und Pooling Layers in CNNs sind direkt durch die Abläufe von einfachen und komplexen Zellen der visuellen Neurowissenschaft inspiriert. Die gesamte Architektur hat Parallelitäten zu der Hierarchie des visuellen Cortex. 
 
 \subsubsection*{Convolutional Layers:}
 Die Neuronen im Convolutional Layer führen eine diskrete Faltung auf dem Eingabebild durch. Dafür verwenden sie eine kleine Matrix, zum Beispiel mit der Größe 5x5, mit der sie über das Bild laufen und jeweils durch das innere Produkt der Matrix die Werte berechnen. Diese Matrix wird Fitlerkernel genannt. Danach wird wie bei normalen Neuronen mithilfe einer Aktivierungsfunktion der Output des Neurons bestimmt. Der Vorteil dieser Methode ist, das durch den Filterkernel nicht nur einzelne Punkte eines Bildes betrachtet werden, sondern auch die lokale Umgebung von jedem Punkt. Dadurch können größere Features, die aus mehreren Punkten bestehen besser erkannt werden.
@@ -222,20 +241,28 @@ In CNNs fassen Pooling-Layers den Output von den vorhergehenden Neuronen entspre
 	\label{fig:main_graph_conv}
 \end{figure}
 \Cref{fig:main_graph_conv} zeigt den Aufbau des CNNs. Vor dem ersten Convolutional Layer wird das Eingabebild zu einem 28x28x1 Bild transformiert. Die erste und zweite Dimension stehen dabei für die Bildhöhe und Bildbreite. Die dritte Dimension bezeichnet die Anzahl von Farbkanälen. Da es sich um ein Graustufenbild handelt und nicht RGB wird der Wert 1 angenommen. 
-Bei der convolution werden mit einer Kernelgröße von 5x5 32 features erzeugt. Danach wird ein max-pooling mit einer Kernelgröße von 2x2 und einer Schrittweite von 2 durchgeführt. Dadurch wird die Größe des Bildes auf 14x14 reduziert. Anschließend werden die features in ein fully-connected Layer weitergeleitet. Dort werden die Daten in 1024 Nodes verarbeitet und danach an das Output layer, welches ein fully-connected Layer mit 10 Outputs ist, übergeben. Jeder Output steht dabei für einen Buchstaben.
+Bei der Convolution werden mit einer Kernelgröße von 5x5 32 features erzeugt. Danach wird ein max-pooling mit einer Kernelgröße von 2x2 und einer Schrittweite von 2 durchgeführt. Dadurch wird die Größe des Bildes auf 14x14 reduziert. Anschließend werden die features in ein fully-connected Layer weitergeleitet. Dort werden die Daten in 1024 Nodes verarbeitet und danach an das Output layer, welches ein fully-connected Layer mit 10 Outputs ist, übergeben. Jeder Output steht dabei für einen Buchstaben.
 
 \subsection{CNN mit Inception Layer}
 \subsubsection*{Inception Layers:}
 \begin{figure}
-	\subfigure[Naiver Aufbau]{\includegraphics[width=0.49\textwidth]{images/inception_naive_graph.png}}
-	\subfigure[Verbesserter Aufbau]{\includegraphics[width=0.49\textwidth]{images/inception_pro_graph.png}}
-	\caption{Aufbau eines Inception Layers}
+	\centering
+	\subfigure{\includegraphics[width=0.9\textwidth]{images/inception_naive_graph.png}}
+%	\subfigure[Verbesserter Aufbau]{\includegraphics[width=0.49\textwidth]{images/inception_pro_graph.png}}
+	\caption{Naiver Aufbau}
 	\label{fig:inception_graph}
+\end{figure}
+\begin{figure}
+	%\subfigure[Naiver Aufbau]{\includegraphics[width=0.49\textwidth]{images/inception_naive_graph.png}}
+	\centering
+	\subfigure{\includegraphics[width=0.9\textwidth]{images/inception_pro_graph.png}}
+	\caption{Verbesserter Aufbau}
+	\label{fig:inception_graph_improved}
 \end{figure}
 In einem normalen Convolutional Layer muss festgelegt werden welche Größe der Filterkernel haben soll. Verschieden Größen bringen dabei immer Vor- und Nachteile mit sich. Deshalb ist die Idee von Inception Layers diese Wahl flexibler zu machen und dem Netz zu überlassen. Außerdem wurde in \cite{sparse_paper} gezeigt, das es Vorteile bringt spärlich vernetzte Convolutional Layers zu nutzen. Das ist mit der modernen Rechnerarchitektur allerdings nicht sehr Effizient möglich. Mit Inception Modulen wird versucht diese Eigenschaft anzunähern und trotzdem die aktuelle Hardware maximal auszunutzen.\\
 Um das zu ermöglichen enthält ein Inception Layer Convolution Module mit verschiedenen Kernelgrößen und auch Pooling Module, die konkateniert werden. Folgende Motivationen stehen hinter der Nutzung der jeweiligen Module: In den Schichten des Netzes, welche nah am Input sind, macht es mehr Sinn kleinere Features verstärkt zu suchen, wozu 1x1 Convolutions gut geeignet sind. Allerdings wird es auch einige Features geben, die räumlich weit voneinander entfernt sind, weshalb man größere Filter benötigt. Deswegen nutzt man auch 3x3 und 5x5 Convolutions. In den höheren Schichten des Netzes sollten diese verstärkt genutzt werden, um mehr größere Features zu extrahieren. Außerdem haben sich Pooling Layers als sehr wichtig in CNN's erwiesen, weshalb zusätzlich zu den Convolution Modulen auch ein Pooling Modul als alternativer Pfad in das Inception Layer eingefügt wird.\\
-In \Cref{fig:inception_graph} sieht man nun den Aufbau eines Inception Layers. Links ist zunächst der Naive Aufbau, wobei alle Module direkt auf den Input angewendet und dann Konkateniert werden. Das Problem bei diesem Ansatz ist allerdings, das dieses Layer einen extrem hohen Rechenaufwand hätte und wenn man mehrere Inception Layers hintereinander schalten würde, würde die Größe des Outputs durch die Konkatenation der Outputs der inneren Module immer weiter ansteigen.
-Um diese Probleme ein wenig abzuschwächen führt man üblicherweise vor den großen Convolutions jeweils auch eine 1x1 Convolution durch. Dadurch reduziert man die Dimension des Inputs für die großen Module, was zu einer deutlich besseren Laufzeit führt. Dies liefert den Aufbau, den man in dem rechtem Diagramm sieht.\\
+In \Cref{fig:inception_graph} und \cref{fig:inception_graph_improved} sieht man nun den Aufbau eines Inception Layers. \cref{fig:inception_graph} zeigt zunächst den Naive Aufbau, wobei alle Module direkt auf den Input angewendet und dann konkateniert werden. Das Problem bei diesem Ansatz ist allerdings, das dieses Layer einen extrem hohen Rechenaufwand hätte und wenn man mehrere Inception Layers hintereinander schalten würde, würde die Größe des Outputs durch die Konkatenation der Outputs der inneren Module immer weiter ansteigen.
+Um diese Probleme ein wenig abzuschwächen führt man üblicherweise vor den großen Convolutions jeweils auch eine 1x1 Convolution durch. Dadurch reduziert man die Dimension des Inputs für die großen Module, was zu einer deutlich besseren Laufzeit führt. Dies liefert den Aufbau, den man in \cref{fig:inception_graph_improved} sieht.\\
 Die Vorteile dieser Art der Layers in einem CNN gegenüber einem normalen Convolutional Layer sind zum einen, das man durch die Dimensions-Reduktion mehr Operationen durchführen kann, ohne die Laufzeit zu extrem zu steigern. Außerdem ist es Sinnvoll visuelle Informationen in verschiedenen Skalierungen zu analysieren, um sowohl große als auch kleine Strukturen erkennen zu können. Dies ist in Inception Modulen in einem Schritt möglich.\\
 In großen Inception Netzwerken würde man mehrere dieser Inception Layers hintereinander anwenden und manchmal ein Pooling Layer mit einer Schrittgröße von 2 dazwischen schalten, um die Auflösung zu halbieren, damit der Speicherverbrauch reduziert wird. in \cite{inception_paper} hat sich gezeigt, dass es sinnvoll sein kann Inception Module erst in höheren Layers des Netzes zu nutzen und in den niedrigeren Schichten auf die klassische Architektur von Convolutianal Netzen zurückzugreifen.
 
@@ -245,8 +272,49 @@ In großen Inception Netzwerken würde man mehrere dieser Inception Layers hinte
 	\caption{Main Graph of Inception CNN}
 	\label{fig:main_graph_inception}
 \end{figure}
-\Cref{fig:main_graph_inception} zeigt nun den Aufbau eines Netzes in dem das convolutional Layer und pooling Layer durch ein inception Layer ersetzt wurde. Dieses bekommt den gleichen Input wie das Convolution Layer im vorher beschriebenen Netz. Der Output des Inception Layers sind 4*32 features. Jedes der 4 Module des Inception Layers erzeugt 32 features der Größe 28x28, welche dann konkateniert werden. Diese Features werden dann wie vorher durch zwei fully-connected Layers weiter verarbeitet.
+\Cref{fig:main_graph_inception} zeigt nun den Aufbau eines Netzes in dem das Convolutional Layer und pooling Layer durch ein inception Layer ersetzt wurde. Dieses bekommt den gleichen Input wie das Convolution Layer im vorher beschriebenen Netz. Der Output des Inception Layers sind 4*32 features. Jedes der 4 Module des Inception Layers erzeugt 32 features der Größe 28x28, welche dann konkateniert werden. Diese Features werden dann wie vorher durch zwei fully-connected Layers weiter verarbeitet.
 
+\section{Details zu den Lernparametern}
+Wir haben unser Model mit Hilfe des AdamOptimizers und einer Batchsize von 50 Beispielen lernen lassen. Die Gewichte in jeder Layer wurden mit einer Gaußverteilung, die den Mittelwert 0 und eine Standardabweichung von 0.1 hat, ermittelt. Zusätzlich wurden Werte, deren Höhe mehr als zwei Standardabweichungen vom Mittelwert abweicht, nicht genommen, sondern erneut zufällig ausgewählt \cite{tensorflow}. Der Neuroneneinfluss (neuron bias) wurde in allen Layers am Anfang auf den Wert 0.1 gesetzt. Die Lernrate hatte das gesamte Training über den Wert 0.0001. 
+
+Das CNN wurde für 1000 Zykel mit den 750 Trainigsbildern trainiert. Dies nahm eine Zeit von 5 Minuten ein, während es bei dem Convolutional Netz mit Inception Layers etwa 30 Minuten dauerte. In \cref{fig:kernel} sind die Filter Kernel des ersten Convolutional Layers zu sehen, welche aus den 28x28x1 großen Eingabebildern gelernt wurden.
+
+\begin{figure}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl0.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl1.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl2.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl3.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl4.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl5.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl6.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl7.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl8.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl9.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl10.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl11.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl12.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl13.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl14.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl15.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl16.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl17.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl18.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl19.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl20.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl21.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl22.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl23.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl24.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl25.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl26.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl27.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl28.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl29.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl30.pdf}}
+	\subfigure{\includegraphics[width=0.1\textwidth]{wl31.pdf}}
+	\caption{32 vom ersten Convolutional Layer gelernte Convolution Kernels der Größe 5x5x3}
+	\label{fig:kernel}
+\end{figure}
 \section{Results}\label{sec:result}
 Wir haben das Datenset, welches aus 1000 Bildern entstand aufgeteilt in ein Trainingsdatenset mit 750 Bildern und ein Testdatenset mit den übrigen 250 Bildern. Für das Training haben wir eine Batches einer Größe von 50 genutzt und für 1000 Generationen trainiert. \\
 
@@ -274,7 +342,7 @@ Eine weitere Beobachtung, die man von diesen Testergebnissen machen kann, ist, d
 
 \section{Conclusion and Outlook}
 Unsere Ergebnisse zeigen, dass Inception Layers in kleinen Netzen für die Klassifikation von Handschrift keine Vorteile gegenüber dem klassischen Aufbau von CNN's mit Convolution und Pooling Layers bringen. Außerdem konnte man erkennen, das das genutzte Datenset nicht sehr gut für das Training von Neuronalen Netzen geeignet ist, weil es zu klein ist und falsche Labels enthält.\\
-Für zukünftige Arbeiten sollte man versuchen das Datenset zu erweitern und die Fehler zu korrigieren. Außerdem wäre es interessant zu untersuchen ob man bei größeren Netzen eine Verbesserung durch Inception Layers bei dieser Art der Klassifizierung beobachten kann. Man sollte auch auf jeden Fall einen Mechanismus zur Reduktion von Overfitting in die Netze einbauen.
+Für zukünftige Arbeiten sollte man versuchen das Datenset zu erweitern und die Fehler zu korrigieren. Außerdem wäre es interessant zu untersuchen, ob man bei größeren Netzen eine Verbesserung durch Inception Layers bei dieser Art der Klassifizierung beobachten kann. Man sollte auch auf jeden Fall einen Mechanismus zur Reduktion von Overfitting in die Netze einbauen.
 %\subsubsection*{Acknowledgments}
 
 
