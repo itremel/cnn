@@ -251,16 +251,16 @@ In großen Inception Netzwerken würde man mehrere dieser Inception Layers hinte
 Wir haben das Datenset, welches aus 1000 Bildern entstand aufgeteilt in ein Trainingsdatenset mit 750 Bildern und ein Testdatenset mit den übrigen 250 Bildern. Für das Training haben wir eine Batches einer Größe von 50 genutzt und für 1000 Generationen trainiert. \\
 
 \begin{figure}
-	\subfigure[Genauigkeit]{\includegraphics[width=0.49\textwidth]{images/1000_step_accuracy_conv.png}}
-	\subfigure[Cross Entropy]{\includegraphics[width=0.49\textwidth]{images/1000_step_cross_entropy_conv.png}}
+	\subfigure[Genauigkeit]{\includegraphics[width=0.49\textwidth]{images/1000_step_accuracy_conv_small.png}}
+	\subfigure[Cross Entropy]{\includegraphics[width=0.49\textwidth]{images/1000_step_cross_entropy_conv_small.png}}
 	\caption{Trainings Genauigkeit und Cross Entropy vom normalen CNN}
 	\label{fig:conv_result_graph}
 \end{figure}
 In \cref{fig:conv_result_graph} sieht man die Genauigkeit und den loss, den wir mithilfe der Cross Entropy berechnet haben, von dem Neuronalen Netzwerk ohne Inception layer. Man sieht, das bereits nach ungefähr 750 Trainingsläufen die Genauigkeit relativ stabil bei 100\% liegt. Bei den Testläufen die nach diesem Training durchgeführt wurden hat das Netz ungefähr eine Genauigkeit von 85\% erreicht. Das Training von diesem Netz hat auf einem Rechner mit wenig Rechenleistung (Core i5 Laptop) und ohne Grafikkarte nur ungefähr 5 Minuten gedauert.\\
 
 \begin{figure}
-	\subfigure[Genauigkeit]{\includegraphics[width=0.49\textwidth]{images/1000_step_accuracy_inception.png}}
-	\subfigure[Cross Entropy]{\includegraphics[width=0.49\textwidth]{images/1000_step_cross_entropy_inception.png}}
+	\subfigure[Genauigkeit]{\includegraphics[width=0.49\textwidth]{images/1000_step_accuracy_inception_small.png}}
+	\subfigure[Cross Entropy]{\includegraphics[width=0.49\textwidth]{images/1000_step_cross_entropy_inception_small.png}}
 	\caption{Trainings Genauigkeit und Cross Entropy vom CNN mit Inception layer}
 	\label{fig:inception_result_graph}
 \end{figure}
