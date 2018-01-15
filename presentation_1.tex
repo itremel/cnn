@@ -79,6 +79,7 @@
 \usepackage{graphicx,caption} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage[utf8]{inputenc} %für ß
+\usepackage{subfigure}
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -130,6 +131,9 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 
 \begin{frame}
 	\frametitle{Aufbau}
+	\begin{figure}
+		\includegraphics[width=0.4\linewidth]{images/main_graph_conv_reduced.png}
+	\end{figure}
 \end{frame}
 
 %------------------------------------------------
@@ -203,7 +207,30 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 %------------------------------------------------
 
 \begin{frame}
-	\frametitle{Ergebnisse}
+	\frametitle{Ergebnisse normales CNN}
+	\begin{figure}
+		\subfigure[Genauigkeit]{\includegraphics[width=0.4\textwidth]{images/1000_step_accuracy_conv_small.png}}
+		\subfigure[Cross Entropy]{\includegraphics[width=0.4\textwidth]{images/1000_step_cross_entropy_conv_small.png}}
+	\end{figure}
+	\begin{itemize}
+		\item Trainingsgenauigkeit nach ungefähr 750 Epochen bei 100\%
+		\item Testgenauigkeit nach dem Training ungefähr 85\%
+		\item Sehr schnelles Training
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Ergebnisse CNN mit Inception Layer}
+	\begin{figure}
+		\subfigure[Genauigkeit]{\includegraphics[width=0.4\textwidth]{images/1000_step_accuracy_inception_small.png}}
+		\subfigure[Cross Entropy]{\includegraphics[width=0.4\textwidth]{images/1000_step_cross_entropy_inception_small.png}}
+	\end{figure}
+	\begin{itemize}
+		\item Trainingsverlauf \"{a}hnlich wie bei dem anderen Netz
+		\item Gelegentliche Einbrüche der Cross Entropy w\"{a}hrend Training
+		\item Testgenauigkeit auch ungefähr bei 80\%-85\%
+		\item Training dauert deutlich l\"{a}nger
+	\end{itemize}
 \end{frame}
 
 %------------------------------------------------
