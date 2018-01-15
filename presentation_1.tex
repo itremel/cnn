@@ -87,10 +87,10 @@
 
 \title[Convolutional Neural Networks]{Bilderkennung mit Convolutional Neural Networks} % The short title appears at the bottom of every slide, the full title is only on the title page
 
-\author{Ivo Tremel und Lennard N\"{o}hren} % Your name
+\author{Ivo Tremel und Lennard Nöhren} % Your name
 \institute[CHI] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
 {
-Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
+Leibniz Universität Hannover \\ % Your institution for the title page
 \medskip
 %\textit{john@smith.com} % Your email address
 }
@@ -133,6 +133,8 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 	\frametitle{Aufbau}
 	\begin{figure}
 		\includegraphics[width=0.4\linewidth]{images/main_graph_conv_reduced.png}
+		\caption{Aufbau klassisches CNN}
+		\label{fig:main_graph_conv}
 	\end{figure}
 \end{frame}
 
@@ -145,6 +147,7 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 	\begin{figure}
 		\includegraphics[width=0.8\linewidth]{images/inception_meme.jpg}\\
 		\hspace*{0pt}\hbox{\scriptsize Quelle:\thinspace{\small\itshape http://knowyourmeme.com/memes/we-need-to-go-deeper}}
+		\label{fig:inception_meme}
 	\end{figure}
 	
 \end{frame}
@@ -155,8 +158,8 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 		\column{0.5\textwidth}
 		\begin{itemize}
 			\item Analyse des Inputs in verschiedenen Skalierungen
-			\item F\"{u}r niedrige Level 1x1 Convolution f\"{u}r kleine Features
-			\item 3x3 und 5x5 Convolution f\"{u}r gr\"{o}{\ss}ere Features
+			\item Für niedrige Level 1x1 Convolution für kleine Features
+			\item 3x3 und 5x5 Convolution für größere Features
 			\item Max Pooling sehr effektiv in CNN's \\ 
 			$\rightarrow$ Als Alternativer Pfad zu Convolutions enthalten
 		\end{itemize}
@@ -164,6 +167,8 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 		\column{0.5\textwidth}
 		\begin{figure}
 			\includegraphics[width=\linewidth]{images/inception_naive_graph.png}
+			\caption{Aufbau Inception Module}
+			\label{fig:naive_inception}
 		\end{figure}
 	\end{columns}
 \end{frame}
@@ -177,12 +182,14 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 			\item Dimension steigt stark an
 			\item Deshalb: 1x1 Convolutions vor den größeren Modulen
 			\item Reduziert die Dimension des Inputs
-			\item Erm\"{o}glicht mehrere Inception Module in Folge 
+			\item Ermöglicht mehrere Inception Module in Folge 
 		\end{itemize}
 		
 		\column{0.5\textwidth}
 		\begin{figure}
 			\includegraphics[width=\linewidth]{images/inception_pro_graph.png}
+			\caption{Aufbau verbessertes Inception Module}
+			\label{fig:pro_inception}
 		\end{figure}
 	\end{columns}
 \end{frame}
@@ -191,6 +198,8 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 	\frametitle{Aufbau}
 	\begin{figure}
 		\includegraphics[width=0.4\linewidth]{images/main_graph_inception_reduced.png}
+		\caption{Aufbau CNN mit Inception Layer}
+		\label{fig:main_graph_inception}
 	\end{figure}
 \end{frame}
 
@@ -200,6 +209,26 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 
 \begin{frame}
 	\frametitle{Datensatz}
+	\begin{itemize}
+		\item 1000 Handschriftliche Buchstaben aus 10 Klassen
+		\item Buchstaben A M O T U Y V und Umlaute Ä Ö Ü
+		\item Einige falsche gelabelte Bilder
+	\end{itemize}
+	\begin{figure}
+		%\includegraphics[width=0.2\textwidth]{hand_images/image_Ae_up_106_point_24.png}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_Ae_up_106_point_24.png}}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_M_up_9_point_94.png}}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_O_up_5_point_14.png}}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_T_up_29_point_14.png}}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_U_up_31_point_328.png}}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_Ae_up_142_point_31.png}}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_Oe_up_157_point_17.png}}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_Ue_up_132_point_13.png}}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_Y_up_46_point_8.png}}
+		\subfigure{\includegraphics[width=0.15\textwidth]{hand_images/image_V_up_46_point_314.png}}	
+		\caption{Beispiele für Buchstaben aus dem Datensatz}
+		\label{fig:charexample}
+	\end{figure}
 \end{frame}
 
 %------------------------------------------------
@@ -211,6 +240,7 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 	\begin{figure}
 		\subfigure[Genauigkeit]{\includegraphics[width=0.4\textwidth]{images/1000_step_accuracy_conv_small.png}}
 		\subfigure[Cross Entropy]{\includegraphics[width=0.4\textwidth]{images/1000_step_cross_entropy_conv_small.png}}
+		\label{fig:conv_results}
 	\end{figure}
 	\begin{itemize}
 		\item Trainingsgenauigkeit nach ungefähr 750 Epochen bei 100\%
@@ -224,12 +254,13 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 	\begin{figure}
 		\subfigure[Genauigkeit]{\includegraphics[width=0.4\textwidth]{images/1000_step_accuracy_inception_small.png}}
 		\subfigure[Cross Entropy]{\includegraphics[width=0.4\textwidth]{images/1000_step_cross_entropy_inception_small.png}}
+		\label{fig:inception_results}
 	\end{figure}
 	\begin{itemize}
-		\item Trainingsverlauf \"{a}hnlich wie bei dem anderen Netz
-		\item Gelegentliche Einbrüche der Cross Entropy w\"{a}hrend Training
+		\item Trainingsverlauf ähnlich wie bei dem anderen Netz
+		\item Gelegentliche Einbrüche der Cross Entropy während Training
 		\item Testgenauigkeit auch ungefähr bei 80\%-85\%
-		\item Training dauert deutlich l\"{a}nger
+		\item Training dauert deutlich länger
 	\end{itemize}
 \end{frame}
 
@@ -239,6 +270,15 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 
 \begin{frame}
 	\frametitle{Diskussion}
+	\begin{itemize}
+		\item Niedrige Genauigkeit im Vergleich zu CNN's mit MNIST Datenset
+		\item Grund dafür: Größe des Datensets und fehlerhafte Labels
+		\item Hier nur sehr kleine Netze verwendet, Größere Netze sind effektiver für Bildanalyse
+		\item Kein Mechanismus um Overfitting zu reduzieren
+		\item Netz mit Inception Modul bringt keine besseren Ergebnisse
+		\item Vorteil Von Inception: in niedrigen Layern kleine Convolutions, in höheren Layern größere Convolution\\
+		$\rightarrow$ In Netz mit nur einem Layer nicht sinnvoll
+	\end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -371,7 +411,7 @@ This statement requires citation \cite{p1}.
 %------------------------------------------------
 
 \begin{frame}
-\Huge{\centerline{Vielen Dank f\"{u}r die Aufmerksamkeit}}
+\Huge{\centerline{Vielen Dank für die Aufmerksamkeit}}
 \end{frame}
 
 %----------------------------------------------------------------------------------------
