@@ -76,8 +76,9 @@
 %\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
 }
 
-\usepackage{graphicx} % Allows including images
+\usepackage{graphicx,caption} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage[utf8]{inputenc} %für ß
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -92,7 +93,7 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 \medskip
 %\textit{john@smith.com} % Your email address
 }
-\date{\today} % Date, can be changed to a custom date
+\date{18. Januar 2018} % Date, can be changed to a custom date
 
 \begin{document}
 
@@ -113,13 +114,10 @@ Leibniz Universit\"{a}t Hannover \\ % Your institution for the title page
 \section{Convolutional Neural Network} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
-\subsection{Convolution Layer} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+\subsection{Convolutional Layer} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
 
 \begin{frame}
-\frametitle{Paragraphs of Text}
-Sed iaculis dapibus gravida. Morbi sed tortor erat, nec interdum arcu. Sed id lorem lectus. Quisque viverra augue id sem ornare non aliquam nibh tristique. Aenean in ligula nisl. Nulla sed tellus ipsum. Donec vestibulum ligula non lorem vulputate fermentum accumsan neque mollis.\\~\\
-
-Sed diam enim, sagittis nec condimentum sit amet, ullamcorper sit amet libero. Aliquam vel dui orci, a porta odio. Nullam id suscipit ipsum. Aenean lobortis commodo sem, ut commodo leo gravida vitae. Pellentesque vehicula ante iaculis arcu pretium rutrum eget sit amet purus. Integer ornare nulla quis neque ultrices lobortis. Vestibulum ultrices tincidunt libero, quis commodo erat ullamcorper id.
+	\frametitle{Covolutional Layer}
 \end{frame}
 
 %------------------------------------------------
@@ -127,53 +125,11 @@ Sed diam enim, sagittis nec condimentum sit amet, ullamcorper sit amet libero. A
 \subsection{Pooling Layer}
 
 \begin{frame}
-\frametitle{Bullet Points}
-\begin{itemize}
-\item Lorem ipsum dolor sit amet, consectetur adipiscing elit
-\item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
-\item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
-\item Nam cursus est eget velit posuere pellentesque
-\item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
-\end{itemize}
+	\frametitle{Pooling Layer}
 \end{frame}
 
-%------------------------------------------------
-
-\subsection{Aufbau}
-
 \begin{frame}
-\frametitle{Blocks of Highlighted Text}
-\begin{block}{Block 1}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-\end{block}
-
-\begin{block}{Block 2}
-Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum quis magna at risus dictum tempor eu vitae velit.
-\end{block}
-
-\begin{block}{Block 3}
-Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed blandit justo nisi ac lacus.
-\end{block}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Multiple Columns}
-\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-
-\column{.45\textwidth} % Left column and width
-\textbf{Heading}
-\begin{enumerate}
-\item Statement
-\item Explanation
-\item Example
-\end{enumerate}
-
-\column{.5\textwidth} % Right column and width
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-
-\end{columns}
+	\frametitle{Aufbau}
 \end{frame}
 
 %------------------------------------------------
@@ -181,19 +137,57 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ul
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Table}
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\caption{Table caption}
-\end{table}
+	\frametitle{Inception Module}
+	\begin{figure}
+		\includegraphics[width=0.8\linewidth]{images/inception_meme.jpg}\\
+		\hspace*{0pt}\hbox{\scriptsize Quelle:\thinspace{\small\itshape http://knowyourmeme.com/memes/we-need-to-go-deeper}}
+	\end{figure}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Inception Module}
+	\begin{columns}[c]
+		\column{0.5\textwidth}
+		\begin{itemize}
+			\item Analyse des Inputs in verschiedenen Skalierungen
+			\item F\"{u}r niedrige Level 1x1 Convolution f\"{u}r kleine Features
+			\item 3x3 und 5x5 Convolution f\"{u}r gr\"{o}{\ss}ere Features
+			\item Max Pooling sehr effektiv in CNN's \\ 
+			$\rightarrow$ Als Alternativer Pfad zu Convolutions enthalten
+		\end{itemize}
+		
+		\column{0.5\textwidth}
+		\begin{figure}
+			\includegraphics[width=\linewidth]{images/inception_naive_graph.png}
+		\end{figure}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Inception Module}
+	\begin{columns}[c]
+		\column{0.5\textwidth}
+		\begin{itemize}
+			\item Sehr hoher Rechenaufwand
+			\item Dimension steigt stark an
+			\item Deshalb: 1x1 Convolutions vor den größeren Modulen
+			\item Reduziert die Dimension des Inputs
+			\item Erm\"{o}glicht mehrere Inception Module in Folge 
+		\end{itemize}
+		
+		\column{0.5\textwidth}
+		\begin{figure}
+			\includegraphics[width=\linewidth]{images/inception_pro_graph.png}
+		\end{figure}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Aufbau}
+	\begin{figure}
+		\includegraphics[width=0.4\linewidth]{images/main_graph_inception_reduced.png}
+	\end{figure}
 \end{frame}
 
 %------------------------------------------------
@@ -201,27 +195,15 @@ Treatment 3 & 0.0009271 & 0.296 \\
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
+	\frametitle{Datensatz}
 \end{frame}
 
 %------------------------------------------------
 \section{Ergebnisse}
 %------------------------------------------------
 
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Verbatim}
-\begin{example}[Theorem Slide Code]
-\begin{verbatim}
 \begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}\end{verbatim}
-\end{example}
+	\frametitle{Ergebnisse}
 \end{frame}
 
 %------------------------------------------------
@@ -229,16 +211,115 @@ $E = mc^2$
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Figure}
-Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
-%\begin{figure}
-%\includegraphics[width=0.8\linewidth]{test}
-%\end{figure}
+	\frametitle{Diskussion}
 \end{frame}
 
 %------------------------------------------------
 \section{Zusammenfassung und Ausblick}
 %------------------------------------------------
+
+\begin{frame}
+	\frametitle{Zusammenfassung und Ausblick}
+\end{frame}
+
+%------------------------------------------------
+%hiernach kommen die besipiele wie man verschiedene sachen in LaTex macht
+%------------------------------------------------
+
+\begin{frame}
+	\frametitle{Paragraphs of Text}
+	Sed iaculis dapibus gravida. Morbi sed tortor erat, nec interdum arcu. Sed id lorem lectus. Quisque viverra augue id sem ornare non aliquam nibh tristique. Aenean in ligula nisl. Nulla sed tellus ipsum. Donec vestibulum ligula non lorem vulputate fermentum accumsan neque mollis.\\~\\
+	
+	Sed diam enim, sagittis nec condimentum sit amet, ullamcorper sit amet libero. Aliquam vel dui orci, a porta odio. Nullam id suscipit ipsum. Aenean lobortis commodo sem, ut commodo leo gravida vitae. Pellentesque vehicula ante iaculis arcu pretium rutrum eget sit amet purus. Integer ornare nulla quis neque ultrices lobortis. Vestibulum ultrices tincidunt libero, quis commodo erat ullamcorper id.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bullet Points}
+	\begin{itemize}
+		\item Lorem ipsum dolor sit amet, consectetur adipiscing elit
+		\item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
+		\item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
+		\item Nam cursus est eget velit posuere pellentesque
+		\item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Blocks of Highlighted Text}
+	\begin{block}{Block 1}
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
+	\end{block}
+	
+	\begin{block}{Block 2}
+		Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum quis magna at risus dictum tempor eu vitae velit.
+	\end{block}
+	
+	\begin{block}{Block 3}
+		Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed blandit justo nisi ac lacus.
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Multiple Columns}
+	\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+		
+		\column{.45\textwidth} % Left column and width
+		\textbf{Heading}
+		\begin{enumerate}
+			\item Statement
+			\item Explanation
+			\item Example
+		\end{enumerate}
+		
+		\column{.5\textwidth} % Right column and width
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
+		
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Table}
+	\begin{table}
+		\begin{tabular}{l l l}
+			\toprule
+			\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
+			\midrule
+			Treatment 1 & 0.0003262 & 0.562 \\
+			Treatment 2 & 0.0015681 & 0.910 \\
+			Treatment 3 & 0.0009271 & 0.296 \\
+			\bottomrule
+		\end{tabular}
+		\caption{Table caption}
+	\end{table}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Theorem}
+	\begin{theorem}[Mass--energy equivalence]
+		$E = mc^2$
+	\end{theorem}
+\end{frame}
+
+\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
+	\frametitle{Verbatim}
+	\begin{example}[Theorem Slide Code]
+		\begin{verbatim}
+		\begin{frame}
+		\frametitle{Theorem}
+		\begin{theorem}[Mass--energy equivalence]
+		$E = mc^2$
+		\end{theorem}
+		\end{frame}\end{verbatim}
+	\end{example}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Figure}
+	Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
+	\begin{figure}
+		\includegraphics[width=0.4\linewidth]{images/main_graph_inception_reduced.png}
+	\end{figure}
+\end{frame}
 
 \begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
 \frametitle{Citation}
@@ -263,7 +344,7 @@ This statement requires citation \cite{p1}.
 %------------------------------------------------
 
 \begin{frame}
-\Huge{\centerline{Vielen Dank für die Aufmerksamkeit}}
+\Huge{\centerline{Vielen Dank f\"{u}r die Aufmerksamkeit}}
 \end{frame}
 
 %----------------------------------------------------------------------------------------
