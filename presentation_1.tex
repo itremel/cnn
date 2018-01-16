@@ -81,6 +81,7 @@
 \usepackage[utf8]{inputenc} %für ß
 \usepackage{subfigure}
 \usepackage{amsmath} 
+\usepackage[ngerman,english]{babel}
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -120,6 +121,14 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 
 \begin{frame}
 	\frametitle{Covolutional Layer}
+	 \begin{itemize}
+		\item Diskrete Faltung auf dem Eingabebild
+		\item 5x5 Matrix läuft über das Bild und filtert die Werte
+		\item Matrix heißt Filterkernel
+		\item Betrachtung der lokalen Umgebung
+		\item Features können aus mehreren Punkten bestehen
+	\end{itemize}
+	
 \end{frame}
 
 %------------------------------------------------
@@ -128,6 +137,12 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 
 \begin{frame}
 	\frametitle{Pooling Layer}
+	\begin{itemize}
+		\item Fassen den Output von vorhergehenden Neuronen zusammen
+		\item Bei MaxPooling wird der größte Wert durchgeschaltet
+		\item Andere Werte werden verworfen
+		\item Reduktion der Datenmenge ermöglicht schnellere Berechnung
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -232,6 +247,19 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 	\end{figure}
 \end{frame}
 
+\begin{frame}
+	\frametitle{Falsch gelabelter Buchstabe}
+	\begin{itemize}
+		\item \glqq image\_Ä\_up\_106\_point\_24.png\grqq
+	\end{itemize}
+	\begin{figure}
+		\includegraphics[width=0.5\textwidth]{hand_images/image_Ae_up_106_point_24.png}
+	
+		\caption{Beispiel für falsch gelabelten Buchstaben }
+		\label{fig:wrongcharexample}
+	\end{figure}
+\end{frame}
+
 %------------------------------------------------
 \section{Ergebnisse}
 %------------------------------------------------
@@ -258,14 +286,12 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 \begin{frame}
 	\frametitle{Gelernte Kernel Filter}
 	\begin{figure}
-\begin{figure}
 	\subfigure{\includegraphics[width=0.2\textwidth]{wl25.pdf}}
 	\subfigure{\includegraphics[width=0.2\textwidth]{wl26.pdf}}
 	\subfigure{\includegraphics[width=0.2\textwidth]{wl27.pdf}}
 	\subfigure{\includegraphics[width=0.2\textwidth]{wl28.pdf}}
-	\caption{6/32 vom ersten Convolutional Layer gelernte Convolution Kernels der Größe 5x5x3}
+	\caption{4/32 vom ersten Convolutional Layer gelernte Convolution Kernels der Größe 5x5x3}
 	\label{fig:kernel}
-\end{figure}
 	\end{figure}
 	\begin{itemize}
 		\item hohe Werte rötlich, niedrig positive gelb
