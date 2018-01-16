@@ -80,6 +80,7 @@
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage[utf8]{inputenc} %für ß
 \usepackage{subfigure}
+\usepackage{amsmath} 
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -234,6 +235,90 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 %------------------------------------------------
 \section{Ergebnisse}
 %------------------------------------------------
+\begin{frame}
+	\frametitle{Details zu Lernparametern}
+	\begin{itemize} 		
+		\item 1000 Epochen mit 750 Trainingsbildern
+		\item unterschiedliche Trainingsgeschwindigkeiten
+		\item AdamOptimizer
+	\end{itemize}
+	\begin{table}
+		\begin{tabular}{l l l l}
+			\toprule
+			\textbf{Batchsize} & \textbf{Lernrate} & \textbf{Weights} & \textbf{Biases}\\
+			\midrule
+			50 &  0.0001 & \( \mathcal{N}(0,0.1) \) & 0.1\\
+			
+			\bottomrule
+		\end{tabular}
+		\caption{Lernparameter}
+	\end{table}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Gelernte Kernel Filter}
+	\begin{figure}
+\begin{figure}
+	\subfigure{\includegraphics[width=0.2\textwidth]{wl25.pdf}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{wl26.pdf}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{wl27.pdf}}
+	\subfigure{\includegraphics[width=0.2\textwidth]{wl28.pdf}}
+	\caption{6/32 vom ersten Convolutional Layer gelernte Convolution Kernels der Größe 5x5x3}
+	\label{fig:kernel}
+\end{figure}
+	\end{figure}
+	\begin{itemize}
+		\item hohe Werte rötlich, niedrig positive gelb
+		\item nahe bei 0 grün, negative Werte blau 
+		\item abstrakte, high-level Features des Convolutional Layers
+		\item aus Bilderkennung bekannte Filter
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Kantenerkennung Sobel Filter}
+	\[ G_{x}=
+	\begin{bmatrix}
+	1 & 2 & 0 & -2 & -1 \\
+	4 & 8 & 0 & -8 & -4 \\
+	6 & 12 & 0 & -12 & -6 \\
+	4 & 8 & 0 & -8 & -4 \\
+	1 & 2 & 0 & -2 & -1 
+	\end{bmatrix}
+	\text{und } G_{y}=
+	\begin{bmatrix}
+	1 & 4 & 6 & 4 & 1 \\
+	2 & 8 & 12 & 8 & 2 \\
+	0 & 0 & 0 & 0 & 0 \\
+	-2 & -8 & -12 & -8 & -2 \\
+	-1 & -4 & -6 & -4 & -1 
+	\end{bmatrix}
+	\]
+	\centering\hspace*{0pt}\hbox{\scriptsize Quelle:\thinspace{\small\itshape Intels IPP Bibliothek}}
+	\begin{figure}
+		\centering
+		\subfigure[$G_x$ detektiert vertikale Kanten]{\includegraphics[width=0.25\textwidth]{xsobel.pdf}}
+		\subfigure[$G_y$ detektiert horizontale Kanten]{\includegraphics[width=0.25\textwidth]{ysobel.pdf}}
+		\caption{Kantenerkennung durch Sobel-Operatoren}
+		\label{fig:sobel}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Kantenerkennung Sobel Filter}
+	\begin{figure}
+		\centering
+		\subfigure{\includegraphics[width=0.25\textwidth]{wl25.pdf}}
+		\subfigure{\includegraphics[width=0.25\textwidth]{ysobel.pdf}}
+		\caption{Ähnlichkeit zu Sobel-Operatoren}
+		\label{fig:sobel}
+	\end{figure}
+	\begin{itemize}
+		\item horizontal gespiegelten Sobelfilter $G_y$  
+		\item 1. Filter erinnert an Sobelfilter
+		\item Faltung mit dem Eingabebild erzeugt ein Gradientenbild
+	\end{itemize}
+\end{frame}
 
 \begin{frame}
 	\frametitle{Ergebnisse normales CNN}
