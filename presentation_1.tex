@@ -117,11 +117,22 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 %------------------------------------------------
 \section{Convolutional Neural Network} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
+\begin{frame}
+	\frametitle{Convolutional Neural Network}
+	\begin{itemize}
+		\item Besonders für Verarbeitung von Bilddaten geeignet
+		\item Lokale Korrelation der Daten bildet Motive
+		\item Convolutional Layers entdecken lokale Features
+		\item Pooling Layers führen Features zusammen
+		\item Parallelitäten zur Hierarchie des visuellen Cortex
+	\end{itemize}
+\end{frame}
 
 \subsection{Convolutional Layer} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
 
+
 \begin{frame}
-	\frametitle{Covolutional Layer}
+	\frametitle{Convolutional Layer}
 	 \begin{itemize}
 		\item Diskrete Faltung auf dem Eingabebild
 		\item 5x5 Matrix läuft über das Bild und filtert die Werte
@@ -131,10 +142,36 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 	\end{itemize}
 	
 \end{frame}
+\begin{frame}
+	\frametitle{2D Discrete Convolution}
+	\[
+	\begin{bmatrix}
+	1 & 2 & 3 \\
+	4 & 5 & 6  \\
+	7& 8 & 9 
+	\end{bmatrix} * 
+	\begin{bmatrix}
+	1 & 2 & 1 \\
+	0 & 0 & 0  \\
+	-1& -2 & -1 
+	\end{bmatrix} = 
+	\begin{bmatrix}
+	-13 & -20 & -17 \\
+	-18 & -24 & -18  \\
+	13& 20 & 17 
+	\end{bmatrix}
+	\]  
+	\begin{itemize}
+		\item \[ y[m,n]=\sum_{j=-\infty}^\infty\sum_{i=-\infty}^\infty x[i,j]*h[m-i,n-j]\]
+	\end{itemize}
+	\hspace*{0pt}\hbox{\scriptsize Quelle:\thinspace{\small\itshape http://songho.ca/dsp/convolution/convolution.html\#convolution\_2d}}
+\end{frame}
+
 
 %------------------------------------------------
 
 \subsection{Pooling Layer}
+
 
 \begin{frame}
 	\frametitle{Pooling Layer}
@@ -145,6 +182,14 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 		\item Reduktion der Datenmenge ermöglicht schnellere Berechnung
 	\end{itemize}
 \end{frame}
+\begin{frame}
+	\frametitle{MaxPooling}
+	\begin{figure}
+		\includegraphics[width=0.9\linewidth]{images/maxpool.jpeg}
+	\end{figure}
+	\hspace*{0pt}\hbox{\scriptsize Quelle:\thinspace{\scriptsize\itshape https://github.com/cs231n/cs231n.github.io/blob/master/assets/cnn/maxpool.jpeg}}
+\end{frame}
+
 
 \begin{frame}
 	\frametitle{Aufbau}
@@ -278,7 +323,7 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 	\frametitle{Details zu Lernparametern}
 	\begin{itemize} 		
 		\item 1000 Epochen mit 750 Trainingsbildern
-		\item unterschiedliche Trainingsgeschwindigkeiten
+		\item Unterschiedliche Trainingsgeschwindigkeiten
 		\item AdamOptimizer
 	\end{itemize}
 	\begin{table}
@@ -305,10 +350,10 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 	\label{fig:kernel}
 	\end{figure}
 	\begin{itemize}
-		\item hohe Werte rötlich, niedrig positive gelb
-		\item nahe bei 0 grün, negative Werte blau 
-		\item abstrakte, high-level Features des Convolutional Layers
-		\item aus Bilderkennung bekannte Filter
+		\item Hohe Werte rötlich, niedrig positive gelb
+		\item Nahe bei 0 grün, negative Werte blau 
+		\item Abstrakte, high-level Features des Convolutional Layers
+		\item Aus Bilderkennung bekannte Filter
 	\end{itemize}
 \end{frame}
 
@@ -351,8 +396,7 @@ Leibniz Universität Hannover \\ % Your institution for the title page
 		\label{fig:sobel}
 	\end{figure}
 	\begin{itemize}
-		\item horizontal gespiegelten Sobelfilter $G_y$  
-		\item 1. Filter erinnert an Sobelfilter
+		\item Linker Filter erinnert horizontal gespiegelten Sobelfilter $G_y$  
 		\item Faltung mit dem Eingabebild erzeugt ein Gradientenbild
 	\end{itemize}
 \end{frame}

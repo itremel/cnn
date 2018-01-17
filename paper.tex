@@ -188,7 +188,7 @@ in zehn verschiedene Kategorien trainiert. Dabei wurde eine Genauigkeit von 85\%
 \section{Einleitung}\label{sec:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Convolutional Neural Networks kommen nahe an menschliche Leistungen heran und der Ansatz der Faltungsnetze bewahrt die entscheidende Lokalität der Bildinformationen. Allerdings
-Deep Learning ist ein aktueller Trend im Bereich des Machine Learnings. Durch architektonische Verbesserungen sowie neue Ansätze zum Training der neuronalen Netze können mehrere Layers und damit versteckte Neuronen genutzt werden. Durch das Hintereinanderschalten von mehreren Layers verbunden mit der nichtlinearen Kombination der jeweiligen Outputs wird eine Projektion des Eingaberaums auf eine niedrigere Dimension erreicht. Jede dieser niedrig dimensionalen Projektionen entspricht dabei einer höher wahrnehmbaren Ebene. Wenn die Gewichte des Netzwerks optimal sind, resultiert das in einer hohen Abstraktionsebene der Daten oder auch z.B. Bilder. Diese Abstraktionsebenen erbringen eine effektive Leistung, weil sie ein automatisches Featureset liefern. Dieses hätte sonst manuell erstellt werden müssen. Unter den verschiedenen methodischen Varianten des Deep Learnings stechen einige besonders hervor. Insbesondere Convolutional Neural Networks (CNNs) sind besonders populär. Ihre Architektur lässt sich als eine Menge von hintereinandergeschalteten Layers, bestehend aus den Convolutional Filtern und den darauf folgenden Pooling Layers, beschreiben. Jedes Layer des Netzwerks bringt dabei ein abstraktes Feature hervor. Diese biologisch inspirierte Architektur ähnelt den Abläufen, in denen der visuelle Cortex bildliche Informationen über rezeptive Felder aufnimmt \cite{ravi}.
+Deep Learning ist ein aktueller Trend im Bereich des Machine Learnings. Durch architektonische Verbesserungen sowie neue Ansätze zum Training der neuronalen Netze können mehrere Layers und damit versteckte Neuronen genutzt werden. Durch das Hintereinanderschalten von mehreren Layers verbunden mit der nichtlinearen Kombination der jeweiligen Outputs wird eine Projektion des Eingaberaums auf eine niedrigere Dimension erreicht. Jede dieser niedrig dimensionalen Projektionen entspricht dabei einer höher wahrnehmbaren Ebene. Wenn die Gewichte des Netzwerks optimal sind, resultiert das in einer hohen Abstraktionsebene der Daten oder auch z.B. Bilder. Diese Abstraktionsebenen erbringen eine effektive Leistung, weil sie ein automatisches Featureset liefern. Dieses hätte sonst manuell erstellt werden müssen. Bei der Auswertung von medizinischen Bildern können solche hoch entwickelten Features genutzt werden, obwohl sie oftmals schwer zu erklären sind. Die Features könnten es ermöglichen Unregelmäßigkeiten in Gewebedaten zu erkennen und damit beispielsweise Tumore zu entdecken. Unter den verschiedenen methodischen Varianten des Deep Learnings stechen einige besonders hervor. Insbesondere Convolutional Neural Networks (CNNs) sind besonders populär. Ihre Architektur lässt sich als eine Menge von hintereinandergeschalteten Layers, bestehend aus den Convolutional Filtern und den darauf folgenden Pooling Layers, beschreiben. Jedes Layer des Netzwerks bringt dabei ein abstraktes Feature hervor. Diese biologisch inspirierte Architektur ähnelt den Abläufen, in denen der visuelle Cortex bildliche Informationen über rezeptive Felder aufnimmt \cite{ravi}.
 
 Das Erkennen von handschriftlichen Texten in Echtzeit ist eine Funktion, die in vielen Bereichen genutzt werden könnte. Allerdings muss man dafür eine präzise Bildanalyse durchführen, was im Allgemeinen einen hohen Rechenaufwand mit sich bringt. In den letzten Jahren hat der sehr schnelle Fortschritt in dem Bereich Machine Learning und insbesondere Neuronale Netze allerdings eine gute Lösung für diese Problematik hervorgebracht. CNNs haben großartige Ergebnisse bei allen möglichen Arten der Bildanalyse gezeigt und sind auch ausgezeichnet zum Erkennen von Buchstaben geeignet. Es werden auch immer wieder neue Verbesserungen für CNN's entwickelt, welche die Präzision der Klassifizierung und die Laufzeit stetig verbessern. Eine dieser Erweiterungen sind die so genannten Inception Module, welche im Jahr 2014 das erste mal in GoogLeNet verwendet wurden \cite{inception_paper}. Das dort beschriebene Netz hat den ersten Platz im ILSVRC(ImageNet Large Scale Visual Recognition Competition) 2014 belegt\cite{ILSVRC2014}.\\
 Im folgenden wird ein klassisches CNN und ein CNN mit einem Inception Modul für eine Zeichenerkennung genutzt und die Performance der beiden Netze wird verglichen.\\
@@ -281,9 +281,7 @@ In großen Inception Netzwerken würde man mehrere dieser Inception Layers hinte
 Wir haben unser Model mit Hilfe des AdamOptimizers und einer Batchsize von 50 Beispielen lernen lassen. Die Gewichte in jeder Layer wurden mit einer Gaußverteilung, die den Mittelwert 0 und eine Standardabweichung von 0.1 hat, ermittelt. Zusätzlich wurden Werte, deren Höhe mehr als zwei Standardabweichungen vom Mittelwert abweicht, nicht genommen, sondern erneut zufällig ausgewählt \cite{tensorflow}. Der Neuroneneinfluss (neuron bias) wurde in allen Layers am Anfang auf den Wert 0.1 gesetzt. Die Lernrate 
 %hatte das gesamte Training über den Wert
 wurde auf den Wert
-0.0001 initialisiert. Das CNN wurde für 1000 Epochen mit den 750 Trainingsbildern trainiert. Dies dauerte 5 Minuten, während es bei dem Convolutional Netz mit Inception Layers etwa 30 Minuten dauerte. 
-
-In \Cref{fig:kernel} sind die Filter Kernel des ersten Convolutional Layers zu sehen, welche aus den 28x28x1 großen Eingabebildern gelernt wurden. Hohe Werte sind dabei rötlich dargestellt, niedrige positive Werte gelb, negative Werte hingegen sind bläulich. Werte die nahe bei 0 sind, werden grün dargestellt. Die gelernten Gewichte des Convolutional Kernels stellen abstrakte, high-level Features dar, die das CNN gelernt hat. Der 26. Convolutional Kernel erinnert dabei an den horizontal gespiegelten Sobelfilter $G_y$ aus \Cref{fig:sobel}. Damit hätte das CNN sich selbst beigebracht horizontale Kanten zu erkennen, um die Buchstaben klassifizieren zu können. Die anderen gelernten Convolutional Kernels könnten andere aus der Bilderkennung bekannte Filter darstellen. Mit diesen könnte das CNN die Eingabebilder nach der Filterung aus einer höheren Abstraktionsebene heraus beurteilen.
+0.0001 initialisiert. Das CNN wurde für 1000 Epochen mit den 750 Trainingsbildern trainiert. Dies dauerte 5 Minuten, während es bei dem Convolutional Netz mit Inception Layers etwa 30 Minuten dauerte.
 \begin{figure}
 	\subfigure{\includegraphics[width=0.1\textwidth]{wl0.pdf}}
 	\subfigure{\includegraphics[width=0.1\textwidth]{wl1.pdf}}
@@ -320,7 +318,14 @@ In \Cref{fig:kernel} sind die Filter Kernel des ersten Convolutional Layers zu s
 	\caption{32 vom ersten Convolutional Layer gelernte Convolution Kernels der Größe 5x5x3}
 	\label{fig:kernel}
 \end{figure}
-
+In \Cref{fig:kernel} sind die Filter Kernel des ersten Convolutional Layers zu sehen, welche aus den 28x28x1 großen Eingabebildern gelernt wurden. Hohe Werte sind dabei rötlich dargestellt, niedrige positive Werte gelb, negative Werte hingegen sind bläulich. Werte die nahe bei 0 sind, werden grün dargestellt. Die gelernten Gewichte des Convolutional Kernels stellen abstrakte, high-level Features dar, die das CNN gelernt hat. Der 26. Convolutional Kernel erinnert dabei an den horizontal gespiegelten Sobelfilter $G_y$ aus \Cref{fig:sobel}. Damit hätte das CNN sich selbst beigebracht horizontale Kanten zu erkennen, um die Buchstaben klassifizieren zu können. Die anderen gelernten Convolutional Kernels könnten andere aus der Bilderkennung bekannte Filter darstellen. Mit diesen könnte das CNN die Eingabebilder nach der Filterung aus einer höheren Abstraktionsebene heraus beurteilen.
+\begin{figure}
+	\centering
+	\subfigure[$G_x$ detektiert vertikale Kanten]{\includegraphics[width=0.35\textwidth]{xsobel.pdf}}
+	\subfigure[$G_y$ detektiert horizontale Kanten]{\includegraphics[width=0.35\textwidth]{ysobel.pdf}}
+	\caption{Kantenerkennung durch Sobel-Operatoren}
+	\label{fig:sobel}
+\end{figure}
 Zum Vergleich lassen sich die in der digitalen Bildverarbeitung üblichen Kantenfilter, wie der Sobelfilter, heranziehen. In Intels IPP Bibliothek \cite{sobel} ist ein 5x5 Sobelfilter folgendermaßen definiert:
 \[ G_{x}=
 \begin{bmatrix}
@@ -340,17 +345,10 @@ Zum Vergleich lassen sich die in der digitalen Bildverarbeitung üblichen Kanten
 \end{bmatrix}
 \]
 Die Sobelfilter werden ebenfalls wie beim Convolutional Layer über eine Faltung mit dem Eingabebild verrechnet und erzeugen zusammen ein Gradientenbild. Die Faltungsergebnisse $G_x$ und $G_y$ werden über folgende Berechnung kombiniert: \[G = \sqrt{G_x^2+G_y^2}\]
-\begin{figure}
-	\centering
-	\subfigure[$G_x$ detektiert vertikale Kanten]{\includegraphics[width=0.35\textwidth]{xsobel.pdf}}
-	\subfigure[$G_y$ detektiert horizontale Kanten]{\includegraphics[width=0.35\textwidth]{ysobel.pdf}}
-	\caption{Kantenerkennung durch Sobel-Operatoren}
-	\label{fig:sobel}
-\end{figure}
+
     
 \section{Ergebnisse}\label{sec:result}
-Wir haben das Datenset, welches aus 1000 Bildern entstand aufgeteilt in ein Trainingsdatenset mit 750 Bildern und ein Testdatenset mit den übrigen 250 Bildern. Für das Training haben wir Batches, die die  Größe 50 hatten, genutzt und für 1000 Generationen trainiert. \\
-
+Wir haben das Datenset, welches aus 1000 Bildern entstand aufgeteilt in ein Trainingsdatenset mit 750 Bildern und ein Testdatenset mit den übrigen 250 Bildern. Für das Training haben wir Batches, die die  Größe 50 hatten, genutzt und für 1000 Generationen trainiert.
 \begin{figure}
 	\subfigure[Genauigkeit]{\includegraphics[width=0.49\textwidth]{images/1000_step_accuracy_conv_small.png}}
 	\subfigure[Cross Entropy]{\includegraphics[width=0.49\textwidth]{images/1000_step_cross_entropy_conv_small.png}}
